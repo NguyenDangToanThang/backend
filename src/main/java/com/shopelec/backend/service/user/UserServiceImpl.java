@@ -2,6 +2,7 @@ package com.shopelec.backend.service.user;
 
 import java.util.List;
 
+import com.shopelec.backend.dto.request.SigninRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,11 @@ public class UserServiceImpl implements UserService{
             () -> new RuntimeException("User not found")
         );
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public User findByEmailAndPassword(SigninRequest request) {
+        return userRepository.findByEmailAndPassword(request.getEmail(), passwordEncoder.encode(request.getPassword()));
     }
 
     @Override
