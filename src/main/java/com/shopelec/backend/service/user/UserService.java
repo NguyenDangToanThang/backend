@@ -2,6 +2,7 @@ package com.shopelec.backend.service.user;
 
 import java.util.List;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.SigninRequest;
 import com.shopelec.backend.dto.request.SignupRequest;
 import com.shopelec.backend.dto.request.UpdateUserRequest;
@@ -13,5 +14,7 @@ public interface UserService {
     UserResponse update(UpdateUserRequest request);
     List<UserResponse> getAllUser();
     UserResponse findByEmail(String email);
-    User findByEmailAndPassword(SigninRequest request);
+
+    void deleteUser(String email) throws FirebaseAuthException;
+
 }

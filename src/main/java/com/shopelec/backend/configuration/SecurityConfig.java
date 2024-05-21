@@ -21,10 +21,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final String[] PUBLIC_RES = {
-            "/lib/**",
-            "/scss/**",
+            "/img/**",
             "/js/**",
             "/css/**",
+            "/font/**"
     };
 
     @Autowired
@@ -49,12 +49,12 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/v1/api/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/home").hasRole("ADMIN")
+                        .requestMatchers("/v1/admin/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-//                        .successHandler(customSuccessHandle)
                         .successHandler(customSuccessHandle)
                         .permitAll()
                 )

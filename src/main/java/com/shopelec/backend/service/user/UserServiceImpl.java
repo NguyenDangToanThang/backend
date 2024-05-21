@@ -2,7 +2,9 @@ package com.shopelec.backend.service.user;
 
 import java.util.List;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.SigninRequest;
+import com.shopelec.backend.service.firebase.FirebaseService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 public class UserServiceImpl implements UserService{
 
     UserRepository userRepository;
+    FirebaseService firebaseService;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -62,8 +66,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByEmailAndPassword(SigninRequest request) {
-        return userRepository.findByEmailAndPassword(request.getEmail(), passwordEncoder.encode(request.getPassword()));
+    public void deleteUser(String email) throws FirebaseAuthException {
+        if(userRepository.existsByEmail(email)) {
+            User user = userRepository.findByEmail(email).orElseThrow(
+                    () -> new NullPointerException("User not found")
+            );
+            userRepository.delete(user);
+//            firebaseService.deleteUserFirebase(email);
+        } else {
+            throw new NullPointerException("User not found");
+        }
     }
 
     @Override
