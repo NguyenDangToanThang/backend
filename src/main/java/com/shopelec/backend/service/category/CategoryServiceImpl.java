@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -28,14 +30,31 @@ public class CategoryServiceImpl implements CategoryService{
     public Category update(Category category) {
         if(category == null) {
             throw new NullPointerException("Category cannot be null");
-        } else if(!categoryRepository.existsByName(category.getName())) {
-            throw new RuntimeException("Category not found");
         }
         return categoryRepository.save(category);
     }
 
     @Override
-    public void delete(Long id) {
-        categoryRepository.deleteById(id);
+    public boolean delete(Long id) {
+        if(categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<Category> getAllCategory() {
+        return categoryRepository.findAll();
+    }
+
+    @Override
+    public boolean existByName(String name) {
+        return categoryRepository.existsByName(name);
+    }
+
+    @Override
+    public boolean existById(Long id) {
+        return categoryRepository.existsById(id);
     }
 }

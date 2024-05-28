@@ -3,6 +3,7 @@ package com.shopelec.backend.service.user;
 import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.shopelec.backend.dto.request.ChangePasswordRequest;
 import com.shopelec.backend.dto.request.SigninRequest;
 import com.shopelec.backend.dto.request.SignupRequest;
 import com.shopelec.backend.dto.request.UpdateUserRequest;
@@ -16,5 +17,6 @@ public interface UserService {
     UserResponse findByEmail(String email);
 
     void deleteUser(String email) throws FirebaseAuthException;
+    boolean changePasswordAdmin(String email, ChangePasswordRequest request);
 
 }

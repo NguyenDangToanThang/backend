@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Create Product</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" th:href="@{/css/style_toast.css}">
+    <link rel="stylesheet" th:href="@{/css/style_product.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/37fd11320d.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="body-overlay"></div>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3><img src="/img/logo.png" class="img-fluid" alt=""/><span>Shop electronics</span></h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <a th:href="@{/home}" class="dashboard">
+                    <i class="material-icons">dashboard</i>
+                    <span>Account</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a th:href="@{/v1/admin/product}">
+                    <i class="material-icons">aspect_ratio</i>
+                    <span>Product</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/order}">
+                    <i class="material-icons">library_books</i>
+                    <span>Order</span></a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/category}">
+                    <i class="material-icons">apps</i>
+                    <span>Category</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a th:href="@{/v1/admin/brand}">
+                    <i class="material-icons">extension</i>
+                    <span>Brand</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/statistic}">
+                    <i class="material-icons">equalizer</i>
+                    <span>Statistics</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="top-navbar">
+            <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
+            <div class="xp-breadcrumbbar text-center">
+                <h4 class="page-title">Create Product</h4>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Product</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Create Product</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6 p-0 d-flex justify-content-lg-start justify-content-center">
+                                    <h2 class="ml-lg-2">Create Product</h2>
+                                </div>
+                                <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
+                                    <a href="#" class="btn btn-success">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${message != null}" class="mt-3 alert alert-success" role="alert">
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div th:if="${error != null}" class="mt-3 alert alert-success" role="alert">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div class="container-fluid mt-3">
+                            <form th:action="@{/v1/admin/product/add}" method="post">
+                                <div class="form-group">
+                                    <label for="productName">Product name</label>
+                                    <input type="text" class="form-control" name="productName" id="productName" value="Màn hình Gaming LG 24GN65R-B 23.8 inch/ FHD /144Hz /1ms">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="originalPrice">Original price</label>
+                                        <input type="text" class="form-control" id="originalPrice" value="11.990.000 ₫">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="discount">Discount</label>
+                                        <input type="text" class="form-control" id="discount" value="30">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="discountedPrice">The price after lowing down</label>
+                                    <input type="text" class="form-control" id="discountedPrice" value="8.393.000 ₫">
+                                </div>
+                                <div class="form-group product-image">
+                                    <label for="productImage">Image product</label>
+                                    <div class="mb-2">
+                                        <img src="https://via.placeholder.com/300" height="300" width="300" id="productImage" alt="Product Image" class="img-thumbnail">
+                                    </div>
+                                    <input type="file">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" name="description" id="description" rows="5">*Kích thước: 27 inch*Tấm nền: Nano IPS*Độ phân giải: QHD (2560 x 1440) *Tốc độ làm mới: 165Hz, 180Hz (Overclock) *Thời gian đáp ứng: 1ms (GtG at Faster) *Nổi bật : DCI-P3 98% Color Gamut with VESA DisplayHDR 400, AMD FreeSync™, Vesa 100 x 100 mm , G-SYNC Compatible*Cổng kết nối: 2x HDMI, DisplayPort *Phụ kiện: Cáp nguồn, cáp DisplayPort</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="brand_id">Brands</label>
+                                    <input id="brand_id" name="brand_id" hidden="hidden">
+                                    <div class="brand-buttons">
+                                        <button th:each="brand : ${brands}" type="button"
+                                                class="btn btn-secondary btn-sm"
+                                                th:text="${brand.name}" th:value="${brand.id}"></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category_id">Categories</label>
+                                    <input id="category_id" name="category_id" hidden="hidden">
+                                    <div class="category-buttons">
+                                        <button th:each="category : ${categories}" type="button"
+                                                class="btn btn-secondary btn-sm"
+                                                th:text="${category.name}" th:value="${category.id}"></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Features</label>
+                                    <div class="features-container" >
+                                        <input type="hidden" id="features-input" name="featuresInput" />
+                                        <button id="add-feature" type="button" class="btn btn-success btn-small mt-2">
+                                            <i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary text-right" id="add-btn">Add product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="footer-in">
+                    <p>&copy 2024 Shop electronics - All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<div id="toastBox"></div>
+
+<script type="text/javascript">
+    let toastBox = document.getElementById('toastBox');
+    let successMsg = '<i class="fa-solid fa-circle-check"></i> Successfully Submitted';
+    let errorMsg = '<i class="fa-solid fa-circle-xmark"></i> Please fix the error!!';
+    let invalidMsg = '<i class="fa-solid fa-circle-exclamation"></i> Invalid input , check again';
+
+    function showToast(msg) {
+        let toast = document.createElement('div');
+        toast.classList.add('toast');
+        toast.innerHTML = msg;
+        toastBox.appendChild(toast);
+
+        if(msg.includes('error')) {
+            toast.classList.add('error');
+        }
+        if(msg.includes('Invalid')) {
+            toast.classList.add('invalid');
+        }
+
+        setTimeout(()=> {
+            toast.remove();
+        },3000);
+    }
+</script>
+
+<script src="/js/script_product.js"></script>
+<script src="/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $(".xp-menubar").on('click',function(){
+        $('#sidebar').toggleClass('active');
+        $('#content').toggleClass('active');
+      });
+
+       $(".xp-menubar,.body-overlay").on('click',function(){
+         $('#sidebar,.body-overlay').toggleClass('show-nav');
+       });
+    });
+
+</script>
+
+</body>
+
+</html>
+
+

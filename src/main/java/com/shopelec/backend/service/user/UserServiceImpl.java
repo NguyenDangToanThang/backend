@@ -3,6 +3,7 @@ package com.shopelec.backend.service.user;
 import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.shopelec.backend.dto.request.ChangePasswordRequest;
 import com.shopelec.backend.dto.request.SigninRequest;
 import com.shopelec.backend.service.firebase.FirebaseService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,6 +77,22 @@ public class UserServiceImpl implements UserService{
         } else {
             throw new NullPointerException("User not found");
         }
+    }
+
+    @Override
+    public boolean changePasswordAdmin(String email, ChangePasswordRequest request) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("Admin not found")
+        );
+
+        boolean checkPassword = passwordEncoder.matches(request.getOldPassword(), user.getPassword());
+
+        if(checkPassword) {
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     @Override

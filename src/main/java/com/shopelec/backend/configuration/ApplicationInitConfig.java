@@ -50,6 +50,7 @@ public class ApplicationInitConfig {
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setStorageBucket("shopelec-d93e6.appspot.com")
                 .build();
 
         return FirebaseApp.initializeApp(options);

@@ -46,10 +46,9 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PUBLIC_RES).permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/v1/api/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/home").hasRole("ADMIN")
-                        .requestMatchers("/v1/admin/**").permitAll()
+                        .requestMatchers("/v1/api/**").permitAll()
+                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -63,9 +62,7 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login?logout").permitAll()
-                )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.NEVER));
-        ;
+                );
         return http.build();
     }
 

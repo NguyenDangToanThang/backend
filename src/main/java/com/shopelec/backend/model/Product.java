@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,8 +20,8 @@ public class Product {
     String description;
     double price;
     int discount;
-    int amount;
-    String image;
+    int quantity;
+    String image_url;
     String status;
 
     @ManyToOne
@@ -29,4 +31,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     Category category;
+
+    @OneToMany(mappedBy = "product")
+    List<ProductSpecification> productSpecifications;
 }

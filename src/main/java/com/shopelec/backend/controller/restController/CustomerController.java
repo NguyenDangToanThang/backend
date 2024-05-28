@@ -1,4 +1,4 @@
-package com.shopelec.backend.controller;
+package com.shopelec.backend.controller.restController;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,7 +39,4 @@ public class CustomerController {
     public ResponseEntity<UserResponse> updateUser(UpdateUserRequest request) {
         return ResponseEntity.ok(userService.update(request));
     }
-    
-
-
 }
