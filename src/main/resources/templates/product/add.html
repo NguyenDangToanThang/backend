@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/37fd11320d.js" crossorigin="anonymous"></script>
 
@@ -77,7 +78,7 @@
             <div class="xp-breadcrumbbar text-center">
                 <h4 class="page-title">Create Product</h4>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Product</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/v1/admin/product}">Product</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Create Product</li>
                 </ol>
             </div>
@@ -93,7 +94,7 @@
                                     <h2 class="ml-lg-2">Create Product</h2>
                                 </div>
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
-                                    <a href="#" class="btn btn-success">Back</a>
+                                    <a th:href="@{/v1/admin/product}" class="btn btn-success">Back</a>
                                 </div>
                             </div>
                         </div>
@@ -104,39 +105,54 @@
                             <span th:text="${error}"></span>
                         </div>
                         <div class="container-fluid mt-3">
-                            <form th:action="@{/v1/admin/product/add}" method="post">
-                                <div class="form-group">
-                                    <label for="productName">Product name</label>
-                                    <input type="text" class="form-control" name="productName" id="productName" value="Màn hình Gaming LG 24GN65R-B 23.8 inch/ FHD /144Hz /1ms">
+                            <form th:action="@{/v1/admin/product/add}" method="post" enctype="multipart/form-data">
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="productName">Name</label>
+                                        <input type="text" class="form-control" name="name" id="productName" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="quantity">Quantity</label>
+                                        <input type="number" class="form-control" name="quantity" id="quantity" required>
+                                    </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="originalPrice">Original price</label>
-                                        <input type="text" class="form-control" id="originalPrice" value="11.990.000 ₫">
+                                        <input type="number" class="form-control" name="price" id="originalPrice" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="discount">Discount</label>
-                                        <input type="text" class="form-control" id="discount" value="30">
+                                        <label for="discount">Discount (%)</label>
+                                        <input type="number" class="form-control" name="discount" id="discount" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="discountedPrice">The price after lowing down</label>
-                                    <input type="text" class="form-control" id="discountedPrice" value="8.393.000 ₫">
+                                    <input type="text" class="form-control" id="discountedPrice" readonly>
                                 </div>
                                 <div class="form-group product-image">
-                                    <label for="productImage">Image product</label>
-                                    <div class="mb-2">
-                                        <img src="https://via.placeholder.com/300" height="300" width="300" id="productImage" alt="Product Image" class="img-thumbnail">
+                                    <label>Image product</label>
+                                    <div class="mb-3">
+                                        <input type="file" id="file" name="image_url" accept="image/*" required>
+
+                                        <!--                                        <label for="input-file" id="drop-area">-->
+<!--                                            <input type="file" accept="image/*" name="image_url" id="input-file" hidden="hidden">-->
+<!--                                            <div class="image-view">-->
+<!--                                                <img src="/img/508-icon.png" alt="">-->
+<!--                                                <p>Drag and drop or click here<br>to upload image</p>-->
+<!--                                                <span>Update any image from desktop</span>-->
+<!--                                            </div>-->
+<!--                                        </label>-->
                                     </div>
-                                    <input type="file">
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" name="description" id="description" rows="5">*Kích thước: 27 inch*Tấm nền: Nano IPS*Độ phân giải: QHD (2560 x 1440) *Tốc độ làm mới: 165Hz, 180Hz (Overclock) *Thời gian đáp ứng: 1ms (GtG at Faster) *Nổi bật : DCI-P3 98% Color Gamut with VESA DisplayHDR 400, AMD FreeSync™, Vesa 100 x 100 mm , G-SYNC Compatible*Cổng kết nối: 2x HDMI, DisplayPort *Phụ kiện: Cáp nguồn, cáp DisplayPort</textarea>
+                                    <textarea class="form-control" name="description" id="description" rows="5" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="brand_id">Brands</label>
-                                    <input id="brand_id" name="brand_id" hidden="hidden">
+                                    <input id="brand_id" name="brand_id" hidden="hidden" required>
                                     <div class="brand-buttons">
                                         <button th:each="brand : ${brands}" type="button"
                                                 class="btn btn-secondary btn-sm"
@@ -145,7 +161,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="category_id">Categories</label>
-                                    <input id="category_id" name="category_id" hidden="hidden">
+                                    <input id="category_id" name="category_id" hidden="hidden" required>
                                     <div class="category-buttons">
                                         <button th:each="category : ${categories}" type="button"
                                                 class="btn btn-secondary btn-sm"
@@ -183,50 +199,12 @@
 
 <div id="toastBox"></div>
 
-<script type="text/javascript">
-    let toastBox = document.getElementById('toastBox');
-    let successMsg = '<i class="fa-solid fa-circle-check"></i> Successfully Submitted';
-    let errorMsg = '<i class="fa-solid fa-circle-xmark"></i> Please fix the error!!';
-    let invalidMsg = '<i class="fa-solid fa-circle-exclamation"></i> Invalid input , check again';
-
-    function showToast(msg) {
-        let toast = document.createElement('div');
-        toast.classList.add('toast');
-        toast.innerHTML = msg;
-        toastBox.appendChild(toast);
-
-        if(msg.includes('error')) {
-            toast.classList.add('error');
-        }
-        if(msg.includes('Invalid')) {
-            toast.classList.add('invalid');
-        }
-
-        setTimeout(()=> {
-            toast.remove();
-        },3000);
-    }
-</script>
-
+<script src="/js/script_toast.js"></script>
 <script src="/js/script_product.js"></script>
 <script src="/js/jquery-3.3.1.slim.min.js"></script>
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/jquery-3.3.1.min.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-      $(".xp-menubar").on('click',function(){
-        $('#sidebar').toggleClass('active');
-        $('#content').toggleClass('active');
-      });
-
-       $(".xp-menubar,.body-overlay").on('click',function(){
-         $('#sidebar,.body-overlay').toggleClass('show-nav');
-       });
-    });
-
-</script>
 
 </body>
 

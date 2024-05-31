@@ -53,7 +53,7 @@ public class ProductController {
         return "product/add";
     }
     @PostMapping("/add")
-    public String addProduct(@RequestBody ProductRequest request,
+    public String addProduct(ProductRequest request,
                              @RequestParam("featuresInput") String featuresJSON,
                              Model model) throws IOException {
 
@@ -68,6 +68,6 @@ public class ProductController {
             model.addAttribute("error", "Add product failed");
         }
 
-        return "product/add";
+        return "redirect:/v1/admin/product/add";
     }
 }

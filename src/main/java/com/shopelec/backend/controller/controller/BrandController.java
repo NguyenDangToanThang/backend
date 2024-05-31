@@ -2,6 +2,7 @@ package com.shopelec.backend.controller.controller;
 
 import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.Brand;
+import com.shopelec.backend.model.Product;
 import com.shopelec.backend.service.brand.BrandService;
 import com.shopelec.backend.service.user.UserService;
 import lombok.AccessLevel;
@@ -36,6 +37,13 @@ public class BrandController {
         List<Brand> brands = brandService.getAllBrand();
         model.addAttribute("admin", admin);
         model.addAttribute("brands",brands);
+        for (Brand brand : brands) {
+            log.info("Brands: {}", brand.getName());
+            for (Product product : brand.getProducts()) {
+                log.info("Products: {}",product.getName());
+            }
+        }
+        log.info("Brands: {}" , brands);
         return "brand";
     }
 

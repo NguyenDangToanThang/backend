@@ -83,3 +83,31 @@ document.getElementById('add-btn').addEventListener('click', () => {
     document.getElementById('features-input').value = JSON.stringify(features);
 })
 
+const originalPriceInput = document.getElementById('originalPrice');
+const discountInput = document.getElementById('discount');
+const discountedPriceInput = document.getElementById('discountedPrice');
+const defaultValue = 0.00;
+
+        function calculateDiscountedPrice() {
+          if (originalPriceInput.value !== '' && discountInput.value !== '') {
+            const originalPrice = parseFloat(originalPriceInput.value);
+            const discount = parseFloat(discountInput.value);
+
+            const discountAmount = originalPrice * (discount / 100);
+            const discountedPrice = originalPrice - discountAmount;
+
+            discountedPriceInput.value = discountedPrice.toFixed(2);
+          }
+          else {
+            discountedPriceInput.value = defaultValue.toFixed(2);
+          }
+        }
+
+        originalPriceInput.addEventListener('input', calculateDiscountedPrice);
+        discountInput.addEventListener('input', calculateDiscountedPrice);
+
+        calculateDiscountedPrice();
+
+
+
+

@@ -25,10 +25,7 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
         List<ProductSpecification> list = new ArrayList<ProductSpecification>();
 
         for (ProductSpecification productSpecification : request) {
-            if (repository.existsByName(productSpecification.getName())
-                    && repository.existsById(product_id)) {
-
-            } else {
+            if (!repository.existsByNameAndProductId(productSpecification.getName(), product_id)) {
                 productSpecification.setProduct(productRepository.findById(product_id).orElseThrow(
                         () -> new RuntimeException("Product not found")
                 ));
@@ -40,4 +37,5 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
         }
         return repository.saveAll(list);
     }
+
 }

@@ -9,6 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getAllProduct();
+    List<ProductResponse> getAllProduct();
     ProductResponse save(ProductRequest request, List<ProductSpecification> listData) throws IOException;
 }

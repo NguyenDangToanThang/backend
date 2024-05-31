@@ -1,6 +1,8 @@
 package com.shopelec.backend.configuration;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.shopelec.backend.model.User;
@@ -54,6 +56,19 @@ public class ApplicationInitConfig {
                 .build();
 
         return FirebaseApp.initializeApp(options);
+    }
+
+    @Bean
+    public Storage storage() throws IOException {
+        FileInputStream serviceAccount =
+                new FileInputStream("./serviceAccountKey.json");
+
+        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+
+        return StorageOptions.newBuilder()
+                .setCredentials(credentials)
+                .build()
+                .getService();
     }
 
 }
