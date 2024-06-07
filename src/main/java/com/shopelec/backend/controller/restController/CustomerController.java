@@ -1,5 +1,8 @@
 package com.shopelec.backend.controller.restController;
 
+import com.shopelec.backend.model.Address;
+import com.shopelec.backend.model.User;
+import com.shopelec.backend.service.address.AddressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
     UserService userService;
+    AddressService addressService;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(SignupRequest request) {
@@ -32,7 +36,8 @@ public class CustomerController {
 
     @PostMapping("/getInfo")
     public ResponseEntity<UserResponse> getInfoByEmail(@RequestBody String email) {
-        return ResponseEntity.ok(userService.findByEmail(email));
+        UserResponse userResponse = userService.findByEmail(email);
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping("/update")

@@ -4,11 +4,17 @@ import com.shopelec.backend.dto.request.ProductRequest;
 import com.shopelec.backend.dto.response.ProductResponse;
 import com.shopelec.backend.model.Product;
 import com.shopelec.backend.model.ProductSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
-    List<ProductResponse> getAllProduct();
+    Page<ProductResponse> getAllProduct(Pageable pageable);
+    Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable);
     ProductResponse save(ProductRequest request, List<ProductSpecification> listData) throws IOException;
+    boolean existById(Long id);
+    List<ProductResponse> getAllProductAdmin();
+
 }

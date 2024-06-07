@@ -1,13 +1,9 @@
-package com.shopelec.backend.controller;
+package com.shopelec.backend.controller.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.ChangePasswordRequest;
 import com.shopelec.backend.dto.request.UpdateUserRequest;
 import com.shopelec.backend.dto.response.UserResponse;
-import com.shopelec.backend.model.Brand;
-import com.shopelec.backend.model.Category;
-import com.shopelec.backend.service.brand.BrandService;
-import com.shopelec.backend.service.category.CategoryService;
 import com.shopelec.backend.service.firebase.FirebaseService;
 import com.shopelec.backend.service.user.UserService;
 import lombok.AccessLevel;
@@ -18,9 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/v1/admin")

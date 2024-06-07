@@ -1,5 +1,6 @@
 package com.shopelec.backend.controller.controller;
 
+import com.shopelec.backend.dto.request.BrandRequest;
 import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.Brand;
 import com.shopelec.backend.model.Product;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -48,11 +50,11 @@ public class BrandController {
     }
 
     @PostMapping("/add")
-    public String addBrand(Brand brand, RedirectAttributes redirectAttributes) {
-        if(brandService.existByName(brand.getName())) {
+    public String addBrand(BrandRequest request, RedirectAttributes redirectAttributes) throws IOException {
+        if(brandService.existByName(request.getName())) {
             redirectAttributes.addFlashAttribute("error", "Brand already exists");
         } else {
-            Brand result = brandService.save(brand);
+            Brand result = brandService.save(request);
             redirectAttributes.addFlashAttribute("message","Create brand successfully");
         }
         log.info(redirectAttributes.getFlashAttributes().toString());
@@ -60,7 +62,7 @@ public class BrandController {
     }
 
     @PostMapping("/update")
-    public String updateBrand(Brand brand, RedirectAttributes redirectAttributes) {
+    public String updateBrand(BrandRequest brand, RedirectAttributes redirectAttributes) throws IOException {
         if(brandService.existByName(brand.getName())) {
             redirectAttributes.addFlashAttribute("error", "Brand already exists");
         } else {

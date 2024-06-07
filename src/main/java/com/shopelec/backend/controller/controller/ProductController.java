@@ -39,7 +39,7 @@ public class ProductController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
         model.addAttribute("admin", admin);
-        model.addAttribute("products", productService.getAllProduct());
+        model.addAttribute("products", productService.getAllProductAdmin());
         return "product/product";
     }
 

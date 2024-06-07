@@ -17,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService{
 
     static Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
     BrandRepository brandRepository;
@@ -40,52 +41,15 @@ public class ProductServiceImpl implements ProductService{
     ProductMapper productMapper;
 
     @Override
-    public List<ProductResponse> getAllProduct() {
-        List<Product> products = productRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public Page<ProductResponse> getAllProduct(Pageable pageable) {
+        Page<Product> productsPage = productRepository.findAll(pageable);
+        return productsPage.map(this::convertToProductResponse);
+    }
 
-        List<ProductResponse> responses = new ArrayList<ProductResponse>();
-        for(Product product : products) {
-            ProductResponse productResponse = ProductResponse
-                    .builder()
-                    .id(product.getId())
-                    .brand(BrandResponse
-                            .builder()
-                            .id(product.getBrand().getId())
-                            .name(product.getBrand().getName())
-                            .build())
-                    .category(CategoryResponse
-                            .builder()
-                            .id(product.getCategory().getId())
-                            .name(product.getCategory().getName())
-                            .build())
-                    .image_url(convertImageUrl(product.getImage_url()))
-                    .description(product.getDescription())
-                    .discount(product.getDiscount())
-                    .name(product.getName())
-                    .quantity(product.getQuantity())
-                    .price(product.getPrice())
-                    .status(product.getStatus())
-                    .build();
-
-            List<SpecificationResponse> specificationResponses = new ArrayList<SpecificationResponse>();
-
-            List<ProductSpecification> specifications = product.getProductSpecifications();
-            for (ProductSpecification specification : specifications) {
-                SpecificationResponse specificationResponse = SpecificationResponse
-                        .builder()
-                        .id(specification.getId())
-                        .name(specification.getName())
-                        .description(specification.getDescription())
-                        .build();
-                specificationResponses.add(specificationResponse);
-            }
-
-            productResponse.setSpecifications(specificationResponses);
-
-            responses.add(productResponse);
-        }
-
-        return responses;
+    @Override
+    public Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable) {
+        Page<Product> productsPage = productRepository.findByCategoryId(category_id,pageable);
+        return productsPage.map(this::convertToProductResponse);
     }
 
     @Override
@@ -113,7 +77,58 @@ public class ProductServiceImpl implements ProductService{
         return productMapper.toProductResponse(response);
     }
 
+    @Override
+    public boolean existById(Long id) {
+        return productRepository.existsById(id);
+    }
+
+    @Override
+    public List<ProductResponse> getAllProductAdmin() {
+        return productRepository.findAll().stream().map(this::convertToProductResponse).toList();
+    }
+
     private String convertImageUrl(String image_url) {
         return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
+    }
+
+    private ProductResponse convertToProductResponse(Product product) {
+        ProductResponse productResponse = ProductResponse
+                .builder()
+                .id(product.getId())
+                .brand(BrandResponse
+                        .builder()
+                        .id(product.getBrand().getId())
+                        .name(product.getBrand().getName())
+                        .build())
+                .category(CategoryResponse
+                        .builder()
+                        .id(product.getCategory().getId())
+                        .name(product.getCategory().getName())
+                        .build())
+                .image_url(convertImageUrl(product.getImage_url()))
+                .description(product.getDescription())
+                .discount(product.getDiscount())
+                .name(product.getName())
+                .quantity(product.getQuantity())
+                .price(product.getPrice())
+                .status(product.getStatus())
+                .build();
+
+        List<SpecificationResponse> specificationResponses = new ArrayList<>();
+
+        List<ProductSpecification> specifications = product.getProductSpecifications();
+        for (ProductSpecification specification : specifications) {
+            SpecificationResponse specificationResponse = SpecificationResponse
+                    .builder()
+                    .id(specification.getId())
+                    .name(specification.getName())
+                    .description(specification.getDescription())
+                    .build();
+            specificationResponses.add(specificationResponse);
+        }
+
+        productResponse.setSpecifications(specificationResponses);
+
+        return productResponse;
     }
 }

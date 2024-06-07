@@ -2,20 +2,22 @@ package com.shopelec.backend.controller.restController;
 
 
 import com.shopelec.backend.dto.response.ProductResponse;
-import com.shopelec.backend.dto.response.SpecificationResponse;
-import com.shopelec.backend.mapper.ProductMapper;
-import com.shopelec.backend.model.Product;
-import com.shopelec.backend.model.ProductSpecification;
 import com.shopelec.backend.service.product.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(allowedHeaders ="*",methods = {RequestMethod.POST , RequestMethod.GET})
@@ -26,11 +28,32 @@ public class ProductRestController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
     ProductService productService;
-    ProductMapper productMapper;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProduct() {
-        return ResponseEntity.ok(productService.getAllProduct());
+    public ResponseEntity<Map<String, Object>> getAllProduct(@RequestParam(required = false) Long category_id,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "4") int size,
+                                                             @RequestParam(defaultValue = "id,desc") String[] sort) {
+        try {
+            String sortField = sort[0];
+            Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
+            Sort sorting = Sort.by(sortDirection, sortField);
+            Pageable paging = PageRequest.of(page,size,sorting);
+            Page<ProductResponse> pageProducts;
+            if(category_id == null) {
+                pageProducts = productService.getAllProduct(paging);
+            } else {
+                pageProducts = productService.findProductByCategoryId(category_id,paging);
+            }
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", pageProducts.getContent());
+            response.put("currentPage", pageProducts.getNumber());
+            response.put("totalItems", pageProducts.getTotalElements());
+            response.put("totalPages", pageProducts.getTotalPages());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error retrieving products ", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 }

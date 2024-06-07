@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.ChangePasswordRequest;
-import com.shopelec.backend.dto.request.SigninRequest;
-import com.shopelec.backend.service.firebase.FirebaseService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
 
     UserRepository userRepository;
-    FirebaseService firebaseService;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 

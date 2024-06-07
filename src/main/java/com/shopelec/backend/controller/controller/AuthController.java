@@ -1,4 +1,4 @@
-package com.shopelec.backend.controller;
+package com.shopelec.backend.controller.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.response.UserResponse;

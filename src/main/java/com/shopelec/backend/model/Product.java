@@ -35,4 +35,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     List<ProductSpecification> productSpecifications;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> carts;
 }

@@ -1,5 +1,7 @@
 package com.shopelec.backend.controller.controller;
 
+import com.shopelec.backend.dto.request.CategoryRequest;
+import com.shopelec.backend.dto.response.CategoryResponse;
 import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.Category;
 import com.shopelec.backend.service.category.CategoryService;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -30,14 +33,14 @@ public class CategoryController {
     public String toCategory(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
-        List<Category> categories = categoryService.getAllCategory();
+        List<CategoryResponse> categories = categoryService.getAllCategory();
         model.addAttribute("admin", admin);
         model.addAttribute("categories", categories);
         return "category";
     }
 
     @PostMapping("/add")
-    public String addCategory(Category category, RedirectAttributes redirectAttrs) {
+    public String addCategory(CategoryRequest category, RedirectAttributes redirectAttrs) throws IOException {
         if(categoryService.existByName(category.getName())) {
             redirectAttrs.addFlashAttribute("error", "Category already exists");
         } else {
@@ -50,7 +53,7 @@ public class CategoryController {
     }
 
     @PostMapping("/update")
-    public String updateCategory(Category category, RedirectAttributes redirectAttributes) {
+    public String updateCategory(CategoryRequest category, RedirectAttributes redirectAttributes) throws IOException {
         log.info(category.getId().toString());
         if(categoryService.existByName(category.getName())) {
             redirectAttributes.addFlashAttribute("error", "Category already exists");

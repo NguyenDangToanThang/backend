@@ -1,12 +1,17 @@
 package com.shopelec.backend.service.category;
 
+import com.shopelec.backend.dto.request.CategoryRequest;
+import com.shopelec.backend.dto.response.CategoryResponse;
 import com.shopelec.backend.model.Category;
 import com.shopelec.backend.repository.CategoryRepository;
+import com.shopelec.backend.service.firebase.FirebaseStorageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,22 +20,32 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService{
 
     CategoryRepository categoryRepository;
+    FirebaseStorageService firebaseStorageService;
 
     @Override
-    public Category save(Category category) {
-        if(category == null) {
+    public Category save(CategoryRequest request) throws IOException {
+        if(request == null) {
             throw new NullPointerException("Category cannot be null");
-        } else if(categoryRepository.existsByName(category.getName())) {
+        } else if(categoryRepository.existsByName(request.getName())) {
             throw new RuntimeException("Category already exists");
         }
+        Category category = Category
+                .builder()
+                .name(request.getName())
+                .build();
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category update(Category category) {
-        if(category == null) {
+    public Category update(CategoryRequest request) throws IOException {
+        if(request == null) {
             throw new NullPointerException("Category cannot be null");
         }
+        Category category = Category
+                .builder()
+                .id(request.getId())
+                .name(request.getName())
+                .build();
         return categoryRepository.save(category);
     }
 
@@ -44,8 +59,18 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> getAllCategory() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> getAllCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryResponse> responses = new ArrayList<>();
+        for(Category category : categories) {
+            responses.add(CategoryResponse
+                    .builder()
+                    .id(category.getId())
+                     .name(category.getName())
+                    .build()
+            );
+        }
+        return responses;
     }
 
     @Override
@@ -53,8 +78,8 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.existsByName(name);
     }
 
-    @Override
-    public boolean existById(Long id) {
-        return categoryRepository.existsById(id);
+    private String convertImageUrl(String image_url) {
+        return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
     }
+
 }

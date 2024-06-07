@@ -4,11 +4,14 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Builder
-public class BrandResponse {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class AddressResponse {
     Long id;
     String name;
+    String phoneNumber;
+    String address;
+    Long user_id;
 }

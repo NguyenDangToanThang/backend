@@ -1,6 +1,9 @@
 package com.shopelec.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -9,18 +12,22 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String email;
-    private String password;
-    private String name;
-    private String date_created;
-    private String date_updated;
-    private String phoneNumber;
-    private String gender;
-    private String dob;
-    private String role;
-    private String imageUrl;
+    Long id;
+    String email;
+    String password;
+    String name;
+    String date_created;
+    String date_updated;
+    String phoneNumber;
+    String gender;
+    String dob;
+    String role;
+    String imageUrl;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> carts;
 }

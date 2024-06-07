@@ -53,9 +53,12 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")
+//                        .loginProcessingUrl("/login")
                         .successHandler(customSuccessHandle)
                         .permitAll()
+                )
+                .rememberMe(remember -> remember
+                        .key("uniqueAndSecret")
                 )
                 .logout(form -> form
                         .invalidateHttpSession(true)

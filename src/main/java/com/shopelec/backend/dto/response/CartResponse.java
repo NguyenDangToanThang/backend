@@ -8,7 +8,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class BrandResponse {
+public class CartResponse {
     Long id;
-    String name;
+    int quantity;
+    ProductResponse productResponse;
 }
