@@ -13,5 +13,6 @@ public class AddressRequest {
     String name;
     String phoneNumber;
     String address;
-    Long user_id;
+    boolean isSelected;
+    String user_id;
 }

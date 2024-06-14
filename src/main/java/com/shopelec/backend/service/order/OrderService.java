@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface OrderService {
     OrderResponse save(OrderRequest request);
-    List<OrderResponse> getAllOrderByUserId(Long user_id);
+    List<OrderResponse> getAllOrderByUserId(String user_id);
     OrderResponse update(OrderRequest request);
 }

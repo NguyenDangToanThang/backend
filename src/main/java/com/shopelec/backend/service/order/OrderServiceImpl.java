@@ -2,10 +2,13 @@ package com.shopelec.backend.service.order;
 
 import com.shopelec.backend.dto.request.OrderRequest;
 import com.shopelec.backend.dto.response.AddressResponse;
+import com.shopelec.backend.dto.response.OrderDetailResponse;
 import com.shopelec.backend.dto.response.OrderResponse;
 import com.shopelec.backend.model.Order;
+import com.shopelec.backend.model.OrderDetail;
 import com.shopelec.backend.model.User;
 import com.shopelec.backend.repository.AddressRepository;
+import com.shopelec.backend.repository.OrderDetailRepository;
 import com.shopelec.backend.repository.OrderRepository;
 import com.shopelec.backend.repository.UserRepository;
 import lombok.AccessLevel;
@@ -22,6 +25,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
 
     OrderRepository orderRepository;
+    OrderDetailRepository detailRepository;
     AddressRepository addressRepository;
     UserRepository userRepository;
 
@@ -57,7 +61,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderResponse> getAllOrderByUserId(Long user_id) {
+    public List<OrderResponse> getAllOrderByUserId(String user_id) {
         List<OrderResponse> responses = new ArrayList<>();
         List<Order> orders = orderRepository.findAllOrderByUserId(user_id);
         for(Order order : orders) {

@@ -7,8 +7,9 @@ import com.shopelec.backend.model.Address;
 import java.util.List;
 
 public interface AddressService {
-    List<AddressResponse> findAllByUserId(Long user_id);
+    List<AddressResponse> findAllByUserId(String user_id);
     AddressResponse save(AddressRequest address);
-    AddressResponse update(AddressRequest address);
+    AddressResponse setActive(AddressRequest address);
     void delete(Long id);
+    AddressResponse update(AddressRequest addressRequest);
 }

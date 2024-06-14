@@ -28,41 +28,41 @@
             <li class="active">
                 <a th:href="@{/home}" class="dashboard">
                     <i class="material-icons">dashboard</i>
-                    <span>Account</span>
+                    <span>Quản lý tài khoản</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/product}">
                     <i class="material-icons">aspect_ratio</i>
-                    <span>Product</span>
+                    <span>Quản lý sản phẩm</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/order}">
                     <i class="material-icons">library_books</i>
-                    <span>Order</span></a>
+                    <span>Quản lý đơn hàng</span></a>
             </li>
 
             <li >
                 <a th:href="@{/v1/admin/category}">
                     <i class="material-icons">apps</i>
-                    <span>Category</span>
+                    <span>Quản lý danh mục</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/brand}">
                     <i class="material-icons">extension</i>
-                    <span>Brand</span>
+                    <span>Quản lý thương hiệu</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/statistic}">
                     <i class="material-icons">equalizer</i>
-                    <span>Statistics</span>
+                    <span>Thống kê</span>
                 </a>
             </li>
 
@@ -73,11 +73,11 @@
         <div class="top-navbar">
             <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
             <div class="xp-breadcrumbbar text-center">
-                <h4 class="page-title">Dashboard</h4>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Booster</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                </ol>
+                <h4 class="page-title">Trang chủ</h4>
+<!--                <ol class="breadcrumb">-->
+<!--&lt;!&ndash;                    <li class="breadcrumb-item"><a href="#">Booster</a></li>&ndash;&gt;-->
+<!--                    <li class="breadcrumb-item active" aria-current="page">Trang chủ</li>-->
+<!--                </ol>-->
             </div>
         </div>
         <!--------main-content------------->
@@ -88,7 +88,7 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-start justify-content-center">
-                                    <h2 class="ml-lg-2">Manage Account</h2>
+                                    <h2 class="ml-lg-2">Quản lý tài khoản</h2>
                                 </div>
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
 <!--                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">-->
@@ -99,11 +99,11 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>Identifier</th>
-                                <th>Provider</th>
-                                <th>Created</th>
-                                <th>Signed In</th>
-                                <th>User UID</th>
+                                <th>Tài khoản</th>
+                                <th>Loại tài khoản</th>
+                                <th>Ngày tạo</th>
+                                <th>Đã đăng nhập</th>
+                                <th>Mã định danh</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -142,13 +142,13 @@
                                         <div class="modal-content">
                                             <form th:action="@{'/v1/admin/user/delete/' + ${user.email}}">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Delete Account</h4>
+                                                    <h4 class="modal-title">Xóa tài khoản</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                             aria-hidden="true">&times;</button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Are you sure you want to delete these Records?</p>
-                                                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                                    <p>Bạn có chắc chắn muốn xóa tài khoản này không?</p>
+                                                    <p class="text-warning"><small>Hành động này không thể được hoàn tác.</small></p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancel">

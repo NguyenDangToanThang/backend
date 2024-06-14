@@ -39,13 +39,6 @@ public class BrandController {
         List<Brand> brands = brandService.getAllBrand();
         model.addAttribute("admin", admin);
         model.addAttribute("brands",brands);
-        for (Brand brand : brands) {
-            log.info("Brands: {}", brand.getName());
-            for (Product product : brand.getProducts()) {
-                log.info("Products: {}",product.getName());
-            }
-        }
-        log.info("Brands: {}" , brands);
         return "brand";
     }
 

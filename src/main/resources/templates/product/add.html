@@ -30,27 +30,27 @@
             <li>
                 <a th:href="@{/home}" class="dashboard">
                     <i class="material-icons">dashboard</i>
-                    <span>Account</span>
+                    <span>Quản lý tài khoản</span>
                 </a>
             </li>
 
             <li class="active">
                 <a th:href="@{/v1/admin/product}">
                     <i class="material-icons">aspect_ratio</i>
-                    <span>Product</span>
+                    <span>Quản lý sản phẩm</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/order}">
                     <i class="material-icons">library_books</i>
-                    <span>Order</span></a>
+                    <span>Quản lý đơn hàng</span></a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/category}">
                     <i class="material-icons">apps</i>
-                    <span>Category</span>
+                    <span>Quản lý danh mục</span>
                 </a>
             </li>
 
@@ -58,14 +58,14 @@
             <li>
                 <a th:href="@{/v1/admin/brand}">
                     <i class="material-icons">extension</i>
-                    <span>Brand</span>
+                    <span>Quản lý thương hiệu</span>
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/v1/admin/statistic}">
                     <i class="material-icons">equalizer</i>
-                    <span>Statistics</span>
+                    <span>Thống kê</span>
                 </a>
             </li>
 
@@ -76,10 +76,10 @@
         <div class="top-navbar">
             <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
             <div class="xp-breadcrumbbar text-center">
-                <h4 class="page-title">Create Product</h4>
+                <h4 class="page-title">Thêm sản phẩm</h4>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/v1/admin/product}">Product</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Create Product</li>
+                    <li class="breadcrumb-item"><a th:href="@{/v1/admin/product}">Quản lý sản phẩm</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Thêm sản phẩm</li>
                 </ol>
             </div>
         </div>
@@ -91,10 +91,10 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-start justify-content-center">
-                                    <h2 class="ml-lg-2">Create Product</h2>
+                                    <h2 class="ml-lg-2">Thêm mới sản phẩm</h2>
                                 </div>
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
-                                    <a th:href="@{/v1/admin/product}" class="btn btn-success">Back</a>
+                                    <a th:href="@{/v1/admin/product}" class="btn btn-success">Quản lý sản phẩm</a>
                                 </div>
                             </div>
                         </div>
@@ -109,30 +109,30 @@
 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="productName">Name</label>
+                                        <label for="productName">Tên sản phẩm</label>
                                         <input type="text" class="form-control" name="name" id="productName" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="quantity">Quantity</label>
+                                        <label for="quantity">Số lượng bán</label>
                                         <input type="number" class="form-control" name="quantity" id="quantity" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="originalPrice">Original price</label>
+                                        <label for="originalPrice">Giá gốc</label>
                                         <input type="number" class="form-control" name="price" id="originalPrice" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="discount">Discount (%)</label>
+                                        <label for="discount">Giảm giá (%)</label>
                                         <input type="number" class="form-control" name="discount" id="discount" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="discountedPrice">The price after lowing down</label>
+                                    <label for="discountedPrice">Giá bán</label>
                                     <input type="text" class="form-control" id="discountedPrice" readonly>
                                 </div>
                                 <div class="form-group product-image">
-                                    <label>Image product</label>
+                                    <label>Hình ảnh sản phẩm</label>
                                     <div class="mb-3">
                                         <input type="file" id="file" name="image_url" accept="image/*" required>
 
@@ -147,11 +147,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Mô tả</label>
                                     <textarea class="form-control" name="description" id="description" rows="5" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="brand_id">Brands</label>
+                                    <label for="brand_id">Chọn thương hiệu</label>
                                     <input id="brand_id" name="brand_id" hidden="hidden" required>
                                     <div class="brand-buttons">
                                         <button th:each="brand : ${brands}" type="button"
@@ -160,7 +160,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="category_id">Categories</label>
+                                    <label for="category_id">Chọn danh mục</label>
                                     <input id="category_id" name="category_id" hidden="hidden" required>
                                     <div class="category-buttons">
                                         <button th:each="category : ${categories}" type="button"
@@ -169,7 +169,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Features</label>
+                                    <label>Thông số kỹ thuật</label>
                                     <div class="features-container" >
                                         <input type="hidden" id="features-input" name="featuresInput" />
                                         <button id="add-feature" type="button" class="btn btn-success btn-small mt-2">
@@ -177,7 +177,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary text-right" id="add-btn">Add product</button>
+                                    <button type="submit" class="btn btn-primary text-right" id="add-btn">Thêm sản phẩm</button>
                                 </div>
                             </form>
                         </div>
@@ -189,7 +189,7 @@
         <footer class="footer">
             <div class="container-fluid">
                 <div class="footer-in">
-                    <p>&copy 2024 Shop electronics - All Rights Reserved.</p>
+                    <p>&copy 2024 Shop electronics - Đã đăng ký Bản quyền.</p>
                 </div>
             </div>
         </footer>

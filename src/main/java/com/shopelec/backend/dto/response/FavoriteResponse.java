@@ -8,11 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddressResponse {
+public class  FavoriteResponse {
     Long id;
-    String name;
-    String phoneNumber;
-    String address;
-    boolean isSelected;
-    String user_id;
+    ProductResponse productResponse;
 }

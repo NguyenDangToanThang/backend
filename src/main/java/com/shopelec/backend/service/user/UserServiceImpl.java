@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.ChangePasswordRequest;
+import com.shopelec.backend.dto.response.ProductResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +23,37 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService{
 
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse save(SignupRequest request) {
+    public User save(SignupRequest request) {
 
         if(userRepository.existsByEmail(request.getEmail())){
             throw new RuntimeException("User existed");
         } 
         else {
-            User user = userMapper.toUser(request);
             LocalDateTime now = LocalDateTime.now();
             String date = now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            user.setDate_created(date);
-            user.setRole("USER");
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            return userMapper.toUserResponse(userRepository.save(user));
+            User user = User.builder()
+                    .id(request.getId())
+                    .name(request.getName())
+                    .email(request.getEmail())
+                    .phoneNumber(request.getPhoneNumber())
+                    .date_created(date)
+                    .role("USER")
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .build();
+            return userRepository.save(user);
         }
         
     }
@@ -60,6 +70,14 @@ public class UserServiceImpl implements UserService{
             () -> new RuntimeException("User not found")
         );
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public UserResponse findById(String id) {
+//        log.info("ID: {}", id);
+        Optional<User> user = userRepository.findById(id);
+//        log.info("User: {}", user);
+        return userMapper.toUserResponse(user.get());
     }
 
     @Override

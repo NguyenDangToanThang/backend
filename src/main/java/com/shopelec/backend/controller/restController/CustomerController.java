@@ -3,13 +3,10 @@ package com.shopelec.backend.controller.restController;
 import com.shopelec.backend.model.Address;
 import com.shopelec.backend.model.User;
 import com.shopelec.backend.service.address.AddressService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.shopelec.backend.dto.request.SignupRequest;
 import com.shopelec.backend.dto.request.UpdateUserRequest;
@@ -26,22 +23,26 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
+    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
     UserService userService;
     AddressService addressService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(SignupRequest request) {
+    public ResponseEntity<User> register(@RequestBody SignupRequest request) {
         return ResponseEntity.ok(userService.save(request));
     }
 
-    @PostMapping("/getInfo")
-    public ResponseEntity<UserResponse> getInfoByEmail(@RequestBody String email) {
-        UserResponse userResponse = userService.findByEmail(email);
+    @GetMapping("/getInfo")
+    public ResponseEntity<UserResponse> getInfoByEmail(@RequestParam String id) {
+//        log.info("ID getInfo: {}", id);
+        UserResponse userResponse = userService.findById(id);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<UserResponse> updateUser(UpdateUserRequest request) {
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UpdateUserRequest request) {
         return ResponseEntity.ok(userService.update(request));
     }
+
+
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,4 +29,5 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id")
     Address address;
+
 }

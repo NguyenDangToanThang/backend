@@ -7,7 +7,7 @@ import com.shopelec.backend.model.Cart;
 import java.util.List;
 
 public interface CartService {
-    List<CartResponse> findAllByUserId(Long id);
+    List<CartResponse> findAllByUserId(String id);
     Cart findByProductIdAndUserEmail(Long id, String email);
     Cart save(CartRequest request);
     void setQuantity(int quantity, Long id);

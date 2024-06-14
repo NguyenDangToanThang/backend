@@ -21,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(allowedHeaders ="*",methods = {RequestMethod.POST , RequestMethod.GET})
-@RequestMapping("/v1/api/product")
+@RequestMapping(value = "/v1/api/product")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductRestController {
@@ -33,7 +33,8 @@ public class ProductRestController {
     public ResponseEntity<Map<String, Object>> getAllProduct(@RequestParam(required = false) Long category_id,
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "4") int size,
-                                                             @RequestParam(defaultValue = "id,desc") String[] sort) {
+                                                             @RequestParam(defaultValue = "id,desc") String[] sort,
+                                                             @RequestParam(required = false) String user_id) {
         try {
             String sortField = sort[0];
             Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
@@ -41,9 +42,9 @@ public class ProductRestController {
             Pageable paging = PageRequest.of(page,size,sorting);
             Page<ProductResponse> pageProducts;
             if(category_id == null) {
-                pageProducts = productService.getAllProduct(paging);
+                pageProducts = productService.getAllProduct(paging,user_id);
             } else {
-                pageProducts = productService.findProductByCategoryId(category_id,paging);
+                pageProducts = productService.findProductByCategoryId(category_id,paging,user_id);
             }
             Map<String, Object> response = new HashMap<>();
             response.put("products", pageProducts.getContent());

@@ -24,6 +24,7 @@ public class ProductResponse {
     int quantity;
     String image_url;
     String status;
+    boolean favorite;
     BrandResponse brand;
     CategoryResponse category;
     List<SpecificationResponse> specifications;

@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Configuration
 public class ApplicationInitConfig {
@@ -31,11 +36,12 @@ public class ApplicationInitConfig {
                 LocalDateTime now = LocalDateTime.now();
                 String date = now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 User user = User.builder()
+                        .id("1")
                         .name("admin")
                         .email("admin@gmail.com")
                         .dob("16/11/2002")
                         .date_created(date)
-                        .gender("Male")
+                        .gender("Nam")
                         .phoneNumber("0387185045")
                         .role("ADMIN")
                         .password(passwordEncoder.encode("admin"))
@@ -56,6 +62,21 @@ public class ApplicationInitConfig {
                 .build();
 
         return FirebaseApp.initializeApp(options);
+    }
+
+    @Bean
+    public HttpMessageConverter<String> responseBodyConverter() {
+        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
+    }
+
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+                converters.add(responseBodyConverter());
+            }
+        };
     }
 
     @Bean

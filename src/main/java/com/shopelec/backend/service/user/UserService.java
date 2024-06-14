@@ -11,10 +11,11 @@ import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.User;
 
 public interface UserService {
-    UserResponse save(SignupRequest request);
+    User save(SignupRequest request);
     UserResponse update(UpdateUserRequest request);
     List<UserResponse> getAllUser();
     UserResponse findByEmail(String email);
+    UserResponse findById(String id);
 
     void deleteUser(String email) throws FirebaseAuthException;
     boolean changePasswordAdmin(String email, ChangePasswordRequest request);

@@ -37,5 +37,8 @@ public class Product {
     List<ProductSpecification> productSpecifications;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cart> carts;
+    List<Cart> carts;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Favorite> favorites;
 }

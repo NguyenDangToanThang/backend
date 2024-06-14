@@ -33,7 +33,7 @@ public class CartServiceImpl implements CartService{
     ProductRepository productRepository;
 
     @Override
-    public List<CartResponse> findAllByUserId(Long id) {
+    public List<CartResponse> findAllByUserId(String id) {
         List<Cart> carts = cartRepository.findByUserId(id);
         List<CartResponse> responses = new ArrayList<>();
         for(Cart cart : carts) {

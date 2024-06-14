@@ -30,14 +30,14 @@ public class CartRestController {
     ProductMapper productMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAllCartByEmail(@PathVariable Long id) {
+    public ResponseEntity<?> getAllCartByEmail(@PathVariable String id) {
         log.info("ID request: {}", id);
         List<CartResponse> carts = cartService.findAllByUserId(id);
         return new ResponseEntity<>(carts, HttpStatus.OK);
     }
 
     @PostMapping("/addToCart")
-    public ResponseEntity<?> addToCart(CartRequest request) {
+    public ResponseEntity<?> addToCart(@RequestBody CartRequest request) {
         log.info(request.toString());
         Cart cart = cartService.findByProductIdAndUserEmail(request.getProduct_id(), request.getEmail());
         if(cart == null) {
