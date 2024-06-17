@@ -4,11 +4,9 @@ import com.shopelec.backend.dto.request.FavoriteRequest;
 import com.shopelec.backend.dto.request.ProductRequest;
 import com.shopelec.backend.dto.response.*;
 import com.shopelec.backend.mapper.ProductMapper;
-import com.shopelec.backend.mapper.UserMapper;
 import com.shopelec.backend.model.Favorite;
 import com.shopelec.backend.model.Product;
 import com.shopelec.backend.model.ProductSpecification;
-import com.shopelec.backend.model.User;
 import com.shopelec.backend.repository.*;
 import com.shopelec.backend.service.firebase.FirebaseStorageService;
 import lombok.AccessLevel;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +60,7 @@ public class ProductServiceImpl implements ProductService{
                 .description(request.getDescription())
                 .name(request.getName())
                 .discount(request.getDiscount())
-                .status("Enable")
+                .status("Có sẵn")
                 .quantity(request.getQuantity())
                 .build();
         product.setImage_url(firebaseStorageService.uploadFile(request.getImage_url()));

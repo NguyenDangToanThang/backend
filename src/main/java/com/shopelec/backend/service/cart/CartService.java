@@ -11,4 +11,5 @@ public interface CartService {
     Cart findByProductIdAndUserEmail(Long id, String email);
     Cart save(CartRequest request);
     void setQuantity(int quantity, Long id);
+    void deleteByCartId(Long id);
 }

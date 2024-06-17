@@ -31,14 +31,26 @@ public class CartRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAllCartByEmail(@PathVariable String id) {
-        log.info("ID request: {}", id);
+//        log.info("ID request: {}", id);
         List<CartResponse> carts = cartService.findAllByUserId(id);
         return new ResponseEntity<>(carts, HttpStatus.OK);
     }
 
+    @GetMapping("/setQuantity")
+    public ResponseEntity<?> setQuantityCart(@RequestParam Long id, @RequestParam int quantity) {
+        cartService.setQuantity(quantity,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/delete")
+    public ResponseEntity<?> deleteCartByCartId(@RequestParam Long id) {
+        cartService.deleteByCartId(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody CartRequest request) {
-        log.info(request.toString());
+//        log.info(request.toString());
         Cart cart = cartService.findByProductIdAndUserEmail(request.getProduct_id(), request.getEmail());
         if(cart == null) {
             cartService.save(request);

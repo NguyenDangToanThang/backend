@@ -89,6 +89,11 @@ public class CartServiceImpl implements CartService{
         cartRepository.save(cart);
     }
 
+    @Override
+    public void deleteByCartId(Long id) {
+        cartRepository.deleteById(id);
+    }
+
     private String convertImageUrl(String image_url) {
         return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
     }

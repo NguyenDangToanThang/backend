@@ -32,7 +32,7 @@ public class AddressRestController {
     @GetMapping("/{user_id}")
     public ResponseEntity<?> getAllAddressByUserId(@PathVariable String user_id) {
         List<AddressResponse> responses = addressService.findAllByUserId(user_id);
-        log.info(responses.toString());
+//        log.info(responses.toString());
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
