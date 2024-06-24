@@ -1,7 +1,10 @@
 package com.shopelec.backend.service.brand;
 
 import com.shopelec.backend.dto.request.BrandRequest;
+import com.shopelec.backend.dto.response.BrandResponse;
+import com.shopelec.backend.dto.response.CategoryResponse;
 import com.shopelec.backend.model.Brand;
+import com.shopelec.backend.model.Category;
 import com.shopelec.backend.repository.BrandRepository;
 import com.shopelec.backend.service.firebase.FirebaseStorageService;
 import lombok.AccessLevel;
@@ -10,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,7 +22,6 @@ import java.util.List;
 public class BrandServiceImpl implements BrandService{
 
     BrandRepository brandRepository;
-    FirebaseStorageService firebaseStorageService;
 
     @Override
     public Brand save(BrandRequest request) throws IOException {
@@ -65,11 +68,17 @@ public class BrandServiceImpl implements BrandService{
     }
 
     @Override
-    public List<Brand> getAllBrand() {
-        return brandRepository.findAll();
-    }
-
-    private String convertImageUrl(String image_url) {
-        return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
+    public List<BrandResponse> getAllBrand() {
+        List<Brand> brands = brandRepository.findAll();
+        List<BrandResponse> responses = new ArrayList<>();
+        for(Brand brand : brands) {
+            responses.add(BrandResponse
+                    .builder()
+                    .id(brand.getId())
+                    .name(brand.getName())
+                    .build()
+            );
+        }
+        return responses;
     }
 }

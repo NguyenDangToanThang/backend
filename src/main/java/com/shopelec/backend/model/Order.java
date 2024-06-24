@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Entity
 @Data
@@ -18,13 +19,19 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Date orderDate;
+    LocalDateTime orderDate;
     double totalPrice;
     String status;
 
+    public String getOrderDateFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return this.orderDate.format(formatter);
+    }
+    Long coupon_id;
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
+
 
     @ManyToOne
     @JoinColumn(name = "address_id")

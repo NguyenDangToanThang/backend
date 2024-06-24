@@ -20,6 +20,7 @@ public class Address {
     String phoneNumber;
     String address;
     boolean isSelected;
+    boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

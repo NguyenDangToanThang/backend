@@ -52,6 +52,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id) {
+        Page<Product> productsPage = productRepository.findByBrandId(brand_id,pageable);
+        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    }
+
+    @Override
+    public Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id, Long brand_id, Pageable pageable, String user_id) {
+        Page<Product> productsPage = productRepository.findByBrandIdAndCategoryId(brand_id,category_id,pageable);
+        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    }
+
+    @Override
     public ProductResponse save(ProductRequest request, List<ProductSpecification> listData) throws IOException {
 
         Product product = Product

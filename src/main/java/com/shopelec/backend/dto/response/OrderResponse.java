@@ -1,11 +1,11 @@
 package com.shopelec.backend.dto.response;
 
-import com.shopelec.backend.model.OrderDetail;
+import com.shopelec.backend.model.Coupons;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -14,8 +14,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
     Long id;
-    Date orderDate;
+    LocalDateTime orderDate;
     double totalPrice;
     String status;
     AddressResponse addressResponse;
+    Coupons coupons;
 }

@@ -1,6 +1,7 @@
 package com.shopelec.backend.controller.controller;
 
 import com.shopelec.backend.dto.request.BrandRequest;
+import com.shopelec.backend.dto.response.BrandResponse;
 import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.Brand;
 import com.shopelec.backend.model.Product;
@@ -36,7 +37,7 @@ public class BrandController {
     public String toBrand(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
-        List<Brand> brands = brandService.getAllBrand();
+        List<BrandResponse> brands = brandService.getAllBrand();
         model.addAttribute("admin", admin);
         model.addAttribute("brands",brands);
         return "brand";

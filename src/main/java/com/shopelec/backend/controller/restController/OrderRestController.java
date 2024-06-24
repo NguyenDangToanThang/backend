@@ -1,6 +1,7 @@
 package com.shopelec.backend.controller.restController;
 
 import com.shopelec.backend.dto.request.OrderRequest;
+import com.shopelec.backend.service.order.OrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,13 +18,21 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class OrderRestController {
 
+    OrderService orderService;
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody OrderRequest request) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(orderService.save(request),HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllOrderByUserId(@RequestParam String user_id) {
+    public ResponseEntity<?> getOrderStatus(@RequestParam String user_id, @RequestParam String status) {
+        return new ResponseEntity<>(orderService.getAllOrderByUserId(user_id,status),HttpStatus.OK);
+    }
+
+    @GetMapping("/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestParam Long orderId, @RequestParam String status) {
+        orderService.updateStatus(orderId,status);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" th:href="@{/css/style_toast.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/37fd11320d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="body-overlay"></div>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3><span>Shop electronics</span></h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <a th:href="@{/home}" class="dashboard">
+                    <i class="material-icons">dashboard</i>
+                    <span>Quản lý tài khoản</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/product}">
+                    <i class="material-icons">aspect_ratio</i>
+                    <span>Quản lý sản phẩm</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a th:href="@{/v1/admin/order}">
+                    <i class="material-icons">library_books</i>
+                    <span>Quản lý đơn hàng</span></a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/category}">
+                    <i class="material-icons">apps</i>
+                    <span>Quản lý danh mục</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a th:href="@{/v1/admin/brand}">
+                    <i class="material-icons">extension</i>
+                    <span>Quản lý thương hiệu</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/coupons}">
+                    <i class="material-icons">discount</i>
+                    <span>Quản lý mã giảm giá</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/v1/admin/statistic}">
+                    <i class="material-icons">equalizer</i>
+                    <span>Thống kê</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div class="top-navbar">
+            <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
+            <div class="xp-breadcrumbbar text-center">
+                <h4 class="page-title">Quản lý mã giảm giá</h4>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Quản lý mã giảm giá</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6 p-0 d-flex justify-content-lg-start justify-content-center">
+                                    <h2 class="ml-lg-2">Quản lý mã giảm giá</h2>
+                                </div>
+                                <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
+                                    <!--                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">-->
+                                    <!--                                        <i class="material-icons">&#xE15C;</i> <span>Delete</span></a>-->
+                                    <a href="#" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#addCouponsModal'">
+                                        Thêm
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Mã giảm giá</th>
+                                <th>Số tiền giảm</th>
+                                <th>Hạn mức</th>
+                                <th>Trạng thái</th>
+                                <th>Xem chi tiết</th>
+                                <th>Xóa</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="coupons : ${couponsList}">
+                                <td th:text="${coupons.code}"></td>
+                                <td th:text="${#numbers.formatDecimal(coupons.discount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                <td th:text="${#numbers.formatDecimal(coupons.discountLimit, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                <td th:text="${coupons.status}"></td>
+                                <td>
+                                    <a href="#" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#editCouponsModal'+${coupons.code}">
+                                        Sửa
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#deleteCouponsModal'+${coupons.code}">
+                                        Xóa
+                                    </a>
+                                </td>
+                                <div th:id="editCouponsModal + ${coupons.code}" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="post" th:action="@{/v1/admin/coupons/update}">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xem và cập nhật</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id" th:value="${coupons.id}" hidden="hidden">
+                                                    <div class="form-group">
+                                                        <label for="code">Mã giảm giá</label>
+                                                        <input type="text" name="code" id="code" th:value="${coupons.code}" class="form-control" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="description">Mô tả</label>
+                                                        <input type="text" name="description" th:value="${coupons.description}" id="description" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="discount">Giá trị mã</label>
+                                                        <input type="text" name="discount" id="discount" th:value="${coupons.getDiscountFormat}" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="discountLimit">Hạn mức</label>
+                                                        <input type="text" name="discountLimit" th:value="${coupons.getDiscountLimitFormat}" id="discountLimit" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="quantity">Số lượng</label>
+                                                        <input type="number" name="quantity" th:value="${coupons.quantity}" id="quantity" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="expiredDate">Hạn sử dụng</label>
+                                                        <input type="datetime-local" name="expiredDate" id="expiredDate" th:value="${coupons.getExpiredDateFormat}" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Hủy">
+                                                    <input type="submit" class="btn btn-info" value="Lưu">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div th:id="deleteCouponsModal + ${coupons.code}" class="modal fade" tabindex="-1"
+                                     data-bs-backdrop="static" data-bs-keyboard="false"
+                                     role="dialog"
+                                     aria-labelledby="modalTitleId"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                            <form method="get" th:action="@{'/v1/admin/coupons/delete/' + ${coupons.id}}">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Xóa mã</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc muốn xóa mã này không?</p>
+                                                    <p class="text-warning"><small>Hành động này không thể được hoàn tác.</small></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Hủy">
+                                                    <input type="submit" class="btn btn-danger" value="Xóa">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="addCouponsModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post" th:action="@{/v1/admin/coupons/create}">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Xem và cập nhật</h4>
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label >Mã giảm giá</label>
+                                    <input type="text" name="code" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label >Mô tả</label>
+                                    <input type="text" name="description"  class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label >Giá trị mã</label>
+                                    <input type="text" name="discount" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label >Hạn mức</label>
+                                    <input type="text" name="discountLimit" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label >Số lượng</label>
+                                    <input type="number" name="quantity"  class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label >Hạn sử dụng</label>
+                                    <input type="datetime-local" name="expiredDate" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Hủy">
+                                <input type="submit" class="btn btn-info" value="Lưu">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="footer-in">
+                    <p>&copy 2024 Shop electronics - All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<div id="toastBox"></div>
+
+<script src="/js/script_toast.js"></script>
+<script src="/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+</body>
+
+</html>
+
+

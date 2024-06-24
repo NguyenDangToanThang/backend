@@ -35,8 +35,8 @@ public class CouponsRestController {
             }
             return new ResponseEntity<>(responses,HttpStatus.OK);
         }
-        List<CouponsResponse> responses = couponsService.getAllCoupons();
-        return new ResponseEntity<>(responses,HttpStatus.OK);
+//        List<CouponsResponse> responses = couponsService.getAllCoupons();
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

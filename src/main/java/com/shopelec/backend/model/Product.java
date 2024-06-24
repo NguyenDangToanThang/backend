@@ -25,6 +25,10 @@ public class Product {
     String image_url;
     String status;
 
+    public String getImageLink() {
+        return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", this.image_url);
+    }
+
     @ManyToOne
     @JoinColumn(name = "brand_id")
     Brand brand;

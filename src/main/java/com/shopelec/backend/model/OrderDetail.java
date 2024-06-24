@@ -16,11 +16,12 @@ public class OrderDetail {
     Long id;
     int quantity;
 
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
 }

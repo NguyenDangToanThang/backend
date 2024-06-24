@@ -78,8 +78,5 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.existsByName(name);
     }
 
-    private String convertImageUrl(String image_url) {
-        return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
-    }
 
 }

@@ -30,21 +30,26 @@ public class ProductRestController {
     ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllProduct(@RequestParam(required = false) Long category_id,
+    public ResponseEntity<Map<String, Object>> getAllProduct(@RequestParam(defaultValue = "0") Long category_id,
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "4") int size,
                                                              @RequestParam(defaultValue = "id,desc") String[] sort,
-                                                             @RequestParam(required = false) String user_id) {
+                                                             @RequestParam(required = false) String user_id,
+                                                             @RequestParam(defaultValue = "0") Long brand_id) {
         try {
             String sortField = sort[0];
             Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
             Sort sorting = Sort.by(sortDirection, sortField);
             Pageable paging = PageRequest.of(page,size,sorting);
             Page<ProductResponse> pageProducts;
-            if(category_id == null) {
+            if(category_id == 0 && brand_id == 0) {
                 pageProducts = productService.getAllProduct(paging,user_id);
-            } else {
+            } else if(category_id != 0 && brand_id == 0){
                 pageProducts = productService.findProductByCategoryId(category_id,paging,user_id);
+            } else if(category_id == 0 && brand_id != 0) {
+                pageProducts = productService.findProductByBrandId(brand_id,paging,user_id);
+            } else {
+                pageProducts = productService.findProductByBrandIdAndCategoryId(category_id,brand_id,paging,user_id);
             }
             Map<String, Object> response = new HashMap<>();
             response.put("products", pageProducts.getContent());
