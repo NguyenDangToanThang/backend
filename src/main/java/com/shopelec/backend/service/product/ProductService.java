@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
-    Page<ProductResponse> getAllProduct(Pageable pageable, String user_id);
-    Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable, String user_id);
-    Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id);
-    Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id,Long brand_id, Pageable pageable, String user_id);
+    Page<ProductResponse> getAllProduct(Pageable pageable, String user_id, String query);
+    Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable, String user_id,String query);
+    Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id,String query);
+    Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id,Long brand_id, Pageable pageable, String user_id, String query);
     ProductResponse save(ProductRequest request, List<ProductSpecification> listData) throws IOException;
     boolean existById(Long id);
     List<ProductResponse> getAllProductAdmin();

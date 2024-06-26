@@ -45,4 +45,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Favorite> favorites;
+
+    @OneToMany(mappedBy = "product")
+    List<Review> reviews;
 }

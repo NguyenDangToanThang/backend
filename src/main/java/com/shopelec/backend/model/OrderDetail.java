@@ -24,4 +24,6 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
+
+    boolean status;
 }

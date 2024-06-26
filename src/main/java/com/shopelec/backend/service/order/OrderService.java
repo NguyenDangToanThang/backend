@@ -9,7 +9,7 @@ import java.util.List;
 public interface OrderService {
     boolean save(OrderRequest request);
     List<OrderResponse> getAllOrderByUserId(String user_id, String status);
-    OrderResponse update(OrderRequest request);
+    void update(Long id, String status);
     List<Order> getAllOrder();
     Order findById(Long id);
     void updateStatus(Long id, String status);

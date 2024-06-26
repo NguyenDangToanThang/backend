@@ -17,7 +17,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String comment;
-    int rate;
+    double rate;
     int like_comment;
     String date_created;
 

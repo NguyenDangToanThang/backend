@@ -4,19 +4,17 @@ import com.shopelec.backend.dto.request.OrderDetailRequest;
 import com.shopelec.backend.dto.request.OrderRequest;
 import com.shopelec.backend.dto.response.AddressResponse;
 import com.shopelec.backend.dto.response.OrderResponse;
-import com.shopelec.backend.mapper.UserMapper;
 import com.shopelec.backend.model.*;
 import com.shopelec.backend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +23,6 @@ import java.util.Objects;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class OrderServiceImpl implements OrderService{
 
-    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
     OrderRepository orderRepository;
     OrderDetailRepository detailRepository;
     AddressRepository addressRepository;
@@ -33,7 +30,6 @@ public class OrderServiceImpl implements OrderService{
     CouponsRepository couponsRepository;
     ProductRepository productRepository;
     CartRepository cartRepository;
-    UserMapper userMapper;
 
     @Transactional
     @Override
@@ -67,7 +63,7 @@ public class OrderServiceImpl implements OrderService{
             );
             product.setQuantity(product.getQuantity() - request1.getQuantity());
             productRepository.save(product);
-            OrderDetail detail = detailRepository.save(OrderDetail.builder()
+            detailRepository.save(OrderDetail.builder()
                             .product(product)
                             .quantity(request1.getQuantity())
                             .order(order)
@@ -83,9 +79,20 @@ public class OrderServiceImpl implements OrderService{
         List<Order> orders = orderRepository.findAllOrderByUserId(user_id);
         for(Order order : orders) {
            if(order.getStatus().trim().equals(status.trim())) {
-               Coupons coupons = couponsRepository.findById(order.getCoupon_id()).orElseThrow(
-                       () -> new RuntimeException("Coupon not found")
-               );
+               Coupons coupons = Coupons.builder()
+                       .code("")
+                       .id(-1L)
+                       .description("")
+                       .discount(0)
+                       .discountLimit(0)
+                       .expiredDate(new Date())
+                       .quantity(0)
+                       .build();
+               if(order.getCoupon_id() != -1) {
+                    coupons = couponsRepository.findById(order.getCoupon_id()).orElseThrow(
+                           () -> new RuntimeException("Coupon not found")
+                   );
+               }
                responses.add(OrderResponse.builder()
                        .id(order.getId())
                        .orderDate(order.getOrderDate())
@@ -107,8 +114,10 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderResponse update(OrderRequest request) {
-        return null;
+    public void update(Long id, String status) {
+        Order order = findById(id);
+        order.setStatus(status);
+        orderRepository.save(order);
     }
 
     @Override
@@ -127,8 +136,10 @@ public class OrderServiceImpl implements OrderService{
     public void updateStatus(Long id, String status) {
         Order order = findById(id);
         order.setStatus(status);
+        if(!Objects.equals(status, "Đã hủy") && !Objects.equals(status, "Chờ duyệt")) {
+            orderRepository.save(order);
+        }
         if(Objects.equals(status, "Đã hủy")) {
-
             Coupons coupons = couponsRepository.findById(order.getCoupon_id()).orElseThrow(
                     () -> new RuntimeException("Coupons not found")
             );
@@ -143,17 +154,10 @@ public class OrderServiceImpl implements OrderService{
                 product.setQuantity(product.getQuantity() + orderDetails.get(i).getQuantity());
                 productRepository.save(product);
             }
-            Order order1 = orderRepository.save(order);
-            log.info("Order 1: {}", order1.getId());
+            orderRepository.save(order);
         }
         else if (Objects.equals(status, "Chờ duyệt")) {
-            Coupons coupons = couponsRepository.findById(order.getCoupon_id()).orElseThrow(
-                    () -> new RuntimeException("Coupons not found")
-            );
-            if (coupons.getId() != -1) {
-                coupons.setQuantity(coupons.getQuantity() + 1);
-            }
-
+            order.setStatus("Đã hủy");
             List<OrderDetail> orderDetails = detailRepository.findAllByOrderId(order.getId());
             for (OrderDetail orderDetail : orderDetails) {
                 Product product = productRepository.findById(orderDetail.getProduct().getId()).orElseThrow(
@@ -162,9 +166,27 @@ public class OrderServiceImpl implements OrderService{
                 product.setQuantity(product.getQuantity() - orderDetail.getQuantity());
                 productRepository.save(product);
             }
-            order.setOrderDate(LocalDateTime.now());
-            orderRepository.save(order);
 
+            order.setOrderDate(LocalDateTime.now());
+            Order order1 = Order.builder()
+                    .address(order.getAddress())
+                    .user(order.getUser())
+                    .status(status)
+                    .orderDate(LocalDateTime.now())
+                    .coupon_id(order.getCoupon_id())
+                    .totalPrice(order.getTotalPrice())
+                    .build();
+            List<OrderDetail> orderDetails1 = new ArrayList<>();
+            for (OrderDetail orderDetail : orderDetails) {
+                orderDetails1.add(OrderDetail.builder()
+                                .product(orderDetail.getProduct())
+                                .quantity(orderDetail.getQuantity())
+                                .order(orderRepository.save(order1))
+                                .status(false)
+                        .build());
+            }
+
+            detailRepository.saveAll(orderDetails1);
         }
     }
 }

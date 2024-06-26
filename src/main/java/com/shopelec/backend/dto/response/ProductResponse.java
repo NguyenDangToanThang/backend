@@ -28,6 +28,7 @@ public class ProductResponse {
     BrandResponse brand;
     CategoryResponse category;
     List<SpecificationResponse> specifications;
+    List<ReviewResponse> reviews;
 
     public String getImageLink() {
         return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", this.image_url);

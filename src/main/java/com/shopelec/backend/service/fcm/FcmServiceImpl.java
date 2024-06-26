@@ -13,9 +13,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FcmServiceImpl implements FcmService{
 
-    private static final Logger log = LoggerFactory.getLogger(FcmServiceImpl.class);
-    FirebaseMessaging messaging;
-
     @Override
     public void sendNotificationAllUser(String title, String body) throws ExecutionException, InterruptedException {
         Notification notification = Notification.builder()
@@ -26,7 +23,7 @@ public class FcmServiceImpl implements FcmService{
                 .setNotification(notification)
                 .setTopic("all_users")
                 .build();
-        String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+        FirebaseMessaging.getInstance().sendAsync(message).get();
     }
     @Override
     public void sendNotification(String token, String title, String body) throws FirebaseMessagingException, ExecutionException, InterruptedException {
@@ -38,10 +35,6 @@ public class FcmServiceImpl implements FcmService{
                 .setNotification(notification)
                 .setToken(token)
                 .build();
-        try {
-            String message1 = FirebaseMessaging.getInstance().send(message);
-        } catch (FirebaseMessagingException e) {
-            throw e;
-        }
+        FirebaseMessaging.getInstance().send(message);
     }
 }

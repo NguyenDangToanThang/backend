@@ -4,9 +4,11 @@ import com.shopelec.backend.dto.request.FavoriteRequest;
 import com.shopelec.backend.dto.request.ProductRequest;
 import com.shopelec.backend.dto.response.*;
 import com.shopelec.backend.mapper.ProductMapper;
+import com.shopelec.backend.mapper.UserMapper;
 import com.shopelec.backend.model.Favorite;
 import com.shopelec.backend.model.Product;
 import com.shopelec.backend.model.ProductSpecification;
+import com.shopelec.backend.model.Review;
 import com.shopelec.backend.repository.*;
 import com.shopelec.backend.service.firebase.FirebaseStorageService;
 import lombok.AccessLevel;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,29 +41,54 @@ public class ProductServiceImpl implements ProductService{
     ProductSpecificationService productSpecificationService;
     FirebaseStorageService firebaseStorageService;
     ProductMapper productMapper;
+    UserMapper userMapper;
 
     @Override
-    public Page<ProductResponse> getAllProduct(Pageable pageable,String user_id) {
-        Page<Product> productsPage = productRepository.findAll(pageable);
-        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    public Page<ProductResponse> getAllProduct(Pageable pageable,String user_id, String query) {
+
+        if (query != null && !query.isEmpty()) {
+            Page<Product> productsPage = productRepository.findByNameContaining(query,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        } else {
+            Page<Product> productsPage = productRepository.findAll(pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        }
     }
 
     @Override
-    public Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable, String user_id) {
-        Page<Product> productsPage = productRepository.findByCategoryId(category_id,pageable);
-        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    public Page<ProductResponse> findProductByCategoryId(Long category_id, Pageable pageable, String user_id, String query) {
+        if (query != null && !query.isEmpty()) {
+            Page<Product> productsPage = productRepository.findByCategoryIdAndNameContaining(category_id,query,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        } else {
+            Page<Product> productsPage = productRepository.findByCategoryId(category_id,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        }
+
     }
 
     @Override
-    public Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id) {
-        Page<Product> productsPage = productRepository.findByBrandId(brand_id,pageable);
-        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    public Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id, String query) {
+        if (query != null && !query.isEmpty()) {
+            Page<Product> productsPage = productRepository.findByBrandIdAndNameContaining(brand_id,query,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        } else {
+            Page<Product> productsPage = productRepository.findByBrandId(brand_id,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        }
+
     }
 
     @Override
-    public Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id, Long brand_id, Pageable pageable, String user_id) {
-        Page<Product> productsPage = productRepository.findByBrandIdAndCategoryId(brand_id,category_id,pageable);
-        return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+    public Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id, Long brand_id, Pageable pageable, String user_id, String query) {
+        if (query != null && !query.isEmpty()) {
+            Page<Product> productsPage = productRepository.findByBrandIdAndCategoryIdAndNameContaining(brand_id,category_id,query,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+        } else {
+            Page<Product> productsPage = productRepository.findByBrandIdAndCategoryId(brand_id,category_id,pageable);
+            return productsPage.map(product -> convertToProductResponseUser(product,user_id));
+
+        }
     }
 
     @Override
@@ -184,6 +212,22 @@ public class ProductServiceImpl implements ProductService{
             specificationResponses.add(specificationResponse);
         }
 
+        List<ReviewResponse> reviewResponses = new ArrayList<>();
+        List<Review> reviews = product.getReviews();
+
+        for(Review review : reviews) {
+            reviewResponses.add(ReviewResponse.builder()
+                            .id(review.getId())
+                            .like_comment(review.getLike_comment())
+                            .rate(review.getRate())
+                            .comment(review.getComment())
+                            .date_created(review.getDate_created())
+                            .email(review.getUser().getEmail())
+                            .name(review.getUser().getName())
+                    .build());
+        }
+
+        productResponse.setReviews(reviewResponses);
         productResponse.setSpecifications(specificationResponses);
 
         return productResponse;

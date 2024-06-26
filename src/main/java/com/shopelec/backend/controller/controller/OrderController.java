@@ -52,7 +52,7 @@ public class OrderController {
     @GetMapping("/approveOrder/{orderId}")
     public String approve(@RequestParam String userId, @PathVariable Long orderId) throws ExecutionException, FirebaseMessagingException, InterruptedException {
         String token = deviceTokenService.getTokenByUserId(userId).getToken();
-        orderService.updateStatus(orderId, "Chờ giao hàng");
+        orderService.update(orderId, "Chờ giao hàng");
         fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng đã được duyệt và đang giao đến bạn.");
         return "redirect:/v1/admin/order/" + orderId;
     }
@@ -62,9 +62,13 @@ public class OrderController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
         Order order = orderService.findById(order_id);
-        log.info(order.getUser().getId());
-        Coupons coupons = couponsService.findById(order.getCoupon_id());
-        List<OrderDetailResponse> orderDetailResponses = detailService.getAllOrderDetailByOrderId(order_id);
+
+        if(order.getCoupon_id() != -1) {
+            Coupons coupons = couponsService.findById(order.getCoupon_id());
+            model.addAttribute("coupons", coupons);
+
+        }
+        List<OrderDetailResponse> orderDetailResponses = detailService.getAllOrderDetailByOrder(order_id);
 
         double totalOriginal = 0;
         double totalDiscount = 0;
@@ -78,7 +82,6 @@ public class OrderController {
 
         model.addAttribute("admin", admin);
         model.addAttribute("order",order);
-        model.addAttribute("coupons", coupons);
         model.addAttribute("details", orderDetailResponses);
         model.addAttribute("totalOriginal", totalOriginal);
         model.addAttribute("totalDiscount", totalDiscount);

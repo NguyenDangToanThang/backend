@@ -188,7 +188,6 @@
                     </div>
                 </div>
                 <div class="col-md-3"></div>
-                <!-- Chi tiết thanh toán -->
                 <div class="col-md-4 ">
                     <div class="mt-3 mr-3">
                         <h3>Chi Tiết Thanh Toán</h3>
@@ -203,11 +202,11 @@
                     </div>
                     <div class="mt-3 mr-3 info-row info-container">
                         <div class="label-width">Mã Giảm Giá:</div>
-                        <div><span th:text="'-' + ${#numbers.formatDecimal(coupons.discount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span></div>
+                        <div><span th:text="'-' + ${#numbers.formatDecimal(coupons != null ? coupons.discount : 0 , 0, 'COMMA', 0, 'POINT')} + ' VND'"></span></div>
                     </div>
                     <div class="mt-3 mr-3 info-row info-container">
                         <div class="label-width">Tổng Thanh Toán:</div>
-                        <div><strong th:text="${#numbers.formatDecimal(totalPayment - coupons.discount, 0, 'COMMA', 0, 'POINT')} + ' VND'" style="color: red;font-size: 16px"></strong></div>
+                        <div><strong th:text="${#numbers.formatDecimal(totalPayment - (coupons != null ? coupons.discount : 0), 0, 'COMMA', 0, 'POINT')} + ' VND'" style="color: red;font-size: 16px"></strong></div>
                     </div>
                 </div>
             </div>

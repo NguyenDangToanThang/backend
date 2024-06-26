@@ -35,7 +35,8 @@ public class ProductRestController {
                                                              @RequestParam(defaultValue = "4") int size,
                                                              @RequestParam(defaultValue = "id,desc") String[] sort,
                                                              @RequestParam(required = false) String user_id,
-                                                             @RequestParam(defaultValue = "0") Long brand_id) {
+                                                             @RequestParam(defaultValue = "0") Long brand_id,
+                                                             @RequestParam(defaultValue = "") String query) {
         try {
             String sortField = sort[0];
             Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
@@ -43,19 +44,20 @@ public class ProductRestController {
             Pageable paging = PageRequest.of(page,size,sorting);
             Page<ProductResponse> pageProducts;
             if(category_id == 0 && brand_id == 0) {
-                pageProducts = productService.getAllProduct(paging,user_id);
+                pageProducts = productService.getAllProduct(paging,user_id,query);
             } else if(category_id != 0 && brand_id == 0){
-                pageProducts = productService.findProductByCategoryId(category_id,paging,user_id);
+                pageProducts = productService.findProductByCategoryId(category_id,paging,user_id,query);
             } else if(category_id == 0 && brand_id != 0) {
-                pageProducts = productService.findProductByBrandId(brand_id,paging,user_id);
+                pageProducts = productService.findProductByBrandId(brand_id,paging,user_id,query);
             } else {
-                pageProducts = productService.findProductByBrandIdAndCategoryId(category_id,brand_id,paging,user_id);
+                pageProducts = productService.findProductByBrandIdAndCategoryId(category_id,brand_id,paging,user_id,query);
             }
             Map<String, Object> response = new HashMap<>();
             response.put("products", pageProducts.getContent());
             response.put("currentPage", pageProducts.getNumber());
             response.put("totalItems", pageProducts.getTotalElements());
             response.put("totalPages", pageProducts.getTotalPages());
+
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error retrieving products ", e);
