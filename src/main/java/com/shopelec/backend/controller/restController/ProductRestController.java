@@ -50,7 +50,7 @@ public class ProductRestController {
             } else if(category_id == 0 && brand_id != 0) {
                 pageProducts = productService.findProductByBrandId(brand_id,paging,user_id,query);
             } else {
-                pageProducts = productService.findProductByBrandIdAndCategoryId(category_id,brand_id,paging,user_id,query);
+                pageProducts = productService.findProductByBrandIdAndCategoryId(brand_id,category_id,paging,user_id,query);
             }
             Map<String, Object> response = new HashMap<>();
             response.put("products", pageProducts.getContent());

@@ -26,5 +26,4 @@ public class Coupons {
     double discount;
     Date expiredDate;
     int quantity;
-    LocalDateTime deletedDate;
 }

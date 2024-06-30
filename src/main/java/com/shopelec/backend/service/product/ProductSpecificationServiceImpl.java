@@ -20,22 +20,33 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
     ProductRepository productRepository;
 
     @Override
-    public List<ProductSpecification> add(List<ProductSpecification> request, Long product_id) {
+    public void add(List<ProductSpecification> request, Long product_id) {
 
-        List<ProductSpecification> list = new ArrayList<ProductSpecification>();
+        List<ProductSpecification> productSpecifications = repository.findAllByProductId(product_id);
+        for(ProductSpecification specification : productSpecifications) {
+            for(ProductSpecification specification1 : request) {
+                if(specification1.equals(specification)) {
+                    productSpecifications.remove(specification1);
+                }
+            }
+        }
+
+        if(!productSpecifications.isEmpty()) {
+            repository.deleteAll(productSpecifications);
+        }
 
         for (ProductSpecification productSpecification : request) {
             if (!repository.existsByNameAndProductId(productSpecification.getName(), product_id)) {
                 productSpecification.setProduct(productRepository.findById(product_id).orElseThrow(
                         () -> new RuntimeException("Product not found")
                 ));
-                list.add(productSpecification);
+                repository.save(productSpecification);
+            } else {
+                ProductSpecification specification = repository.findByNameAndProductId(productSpecification.getName(), product_id);
+                specification.setDescription(productSpecification.getDescription());
+                repository.save(specification);
             }
         }
-        if (list.isEmpty()) {
-            throw new RuntimeException("Add product specification failed");
-        }
-        return repository.saveAll(list);
     }
 
 }

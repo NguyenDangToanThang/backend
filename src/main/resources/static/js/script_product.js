@@ -1,4 +1,7 @@
 document.getElementById('add-feature').addEventListener('click', function () {
+    addFeature();
+});
+function addFeature(name = '', description = '') {
     const featureContainer = document.createElement('div');
     featureContainer.classList.add('feature');
 
@@ -10,7 +13,8 @@ document.getElementById('add-feature').addEventListener('click', function () {
     nameInput.type = 'text';
     nameInput.name = 'productFeatureName';
     nameInput.classList.add("form-control");
-    nameInput.placeholder = "Enter name";
+    nameInput.placeholder = "Nhập tên";
+    nameInput.value = name;
 
     featureContainer.appendChild(nameInput);
 
@@ -18,7 +22,9 @@ document.getElementById('add-feature').addEventListener('click', function () {
     descInput.type = 'text';
     descInput.name = 'productFeatureDesc';
     descInput.classList.add('form-control')
-    descInput.placeholder = 'Enter value';
+    descInput.placeholder = 'Nhập giá trị';
+    descInput.value = description;
+
     featureContainer.appendChild(descInput);
 
 
@@ -31,6 +37,10 @@ document.getElementById('add-feature').addEventListener('click', function () {
     featureContainer.appendChild(removeButton);
 
     document.querySelector('.features-container').insertBefore(featureContainer, document.getElementById('add-feature'));
+};
+
+existingFeatures.forEach(feature => {
+    addFeature(feature.name, feature.description);
 });
 
 document.querySelectorAll('.remove-feature').forEach(button => {

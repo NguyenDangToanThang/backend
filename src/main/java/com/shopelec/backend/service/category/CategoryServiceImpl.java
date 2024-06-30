@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService{
             responses.add(CategoryResponse
                     .builder()
                     .id(category.getId())
-                     .name(category.getName())
+                    .name(category.getName())
                     .build()
             );
         }
@@ -76,6 +76,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public boolean existByName(String name) {
         return categoryRepository.existsByName(name);
+    }
+
+    @Override
+    public List<Category> getAll() {
+        return categoryRepository.findAll();
     }
 
 

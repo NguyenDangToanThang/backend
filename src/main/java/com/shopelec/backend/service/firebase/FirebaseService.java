@@ -12,11 +12,6 @@ import java.util.List;
 @Service
 public class FirebaseService {
 
-    public void deleteUserFirebase(String email) throws FirebaseAuthException {
-        String uid = findByEmail(email).getUid();
-        FirebaseAuth.getInstance().deleteUser(uid);
-    }
-
     public UserResponseFirebase findByEmail(String email) throws FirebaseAuthException {
         UserRecord userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
         return UserResponseFirebase
@@ -29,25 +24,44 @@ public class FirebaseService {
     }
 
 
-    public List<UserResponseFirebase> listAllUsers() throws FirebaseAuthException {
+    public List<UserResponseFirebase> listAllUsers(int page, int pageSize) throws FirebaseAuthException {
         List<UserResponseFirebase> allUsers = new ArrayList<>();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
+        int offset = page * pageSize;
+
         ListUsersPage currentPage = firebaseAuth.listUsers(null);
+        int index = 0;
         do {
-            for (ExportedUserRecord user : currentPage.getValues()) {
-                UserResponseFirebase response = UserResponseFirebase
-                        .builder()
-                        .email(user.getEmail())
-                        .created(formatDate(user.getUserMetadata().getCreationTimestamp()))
-                        .signedIn(formatDate(user.getUserMetadata().getLastSignInTimestamp()))
-                        .uid(user.getUid())
-                        .build();
-                allUsers.add(response);
+            for (UserRecord user : currentPage.getValues()) {
+                if (index >= offset && index < offset + pageSize) {
+                    UserResponseFirebase response = new UserResponseFirebase();
+                    response.setEmail(user.getEmail());
+                    response.setCreated(formatDate(user.getUserMetadata().getCreationTimestamp()));
+                    response.setSignedIn(formatDate(user.getUserMetadata().getLastSignInTimestamp()));
+                    response.setUid(user.getUid());
+                    allUsers.add(response);
+                }
+                index++;
             }
             currentPage = currentPage.getNextPage();
-        } while (currentPage != null);
+        } while (currentPage != null && allUsers.size() < offset + pageSize);
         return allUsers;
+    }
+
+    public int getTotalUsersCount() throws FirebaseAuthException {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        int totalCount = 0;
+        ListUsersPage page = firebaseAuth.listUsers(null);
+
+        while (page != null) {
+            Iterable<ExportedUserRecord> users = page.getValues();
+            for (UserRecord user : users) {
+                totalCount++;
+            }
+            page = page.getNextPage();
+        }
+        return totalCount;
     }
 
     private String formatDate(Long timestamp) {

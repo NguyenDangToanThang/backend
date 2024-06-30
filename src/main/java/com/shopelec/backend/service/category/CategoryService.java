@@ -13,4 +13,5 @@ public interface CategoryService {
     boolean delete(Long id);
     List<CategoryResponse> getAllCategory();
     boolean existByName(String name);
+    List<Category> getAll();
 }

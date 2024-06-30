@@ -19,9 +19,6 @@ public class CustomSuccessHandle implements AuthenticationSuccessHandler {
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
 
-        log.info("Authorities: {}", authentication.getAuthorities());
-        // log.info("Admin: {}", isAdmin);
-
         if(authentication.getName() != null && isAdmin) {
             response.sendRedirect("/home");
         }

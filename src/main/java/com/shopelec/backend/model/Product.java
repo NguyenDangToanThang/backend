@@ -24,6 +24,7 @@ public class Product {
     int quantity;
     String image_url;
     String status;
+    boolean deleted;
 
     public String getImageLink() {
         return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", this.image_url);

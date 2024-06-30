@@ -69,27 +69,25 @@ public class CouponsServiceImpl implements CouponsService{
         }
         for(Coupons item : coupons) {
 
-            if(item.getDeletedDate() == null) {
-                String status = "Còn mã";
-                java.util.Date date = new Date();
-                if(item.getExpiredDate().compareTo(date) < 0) {
-                    status = "Hết hạn";
-                }
-                else if(item.getQuantity() < 1) {
-                    status = "Đã hết mã";
-                }
-                DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                responses.add(CouponsResponse.builder()
-                        .id(item.getId())
-                        .code(item.getCode())
-                        .description(item.getDescription())
-                        .expiredDate(df.format(item.getExpiredDate()))
-                        .quantity(item.getQuantity())
-                        .discount(item.getDiscount())
-                        .status(status)
-                        .discountLimit(item.getDiscountLimit())
-                        .build());
+            String status = "Còn mã";
+            java.util.Date date = new Date();
+            if(item.getExpiredDate().compareTo(date) < 0) {
+                status = "Hết hạn";
             }
+            else if(item.getQuantity() < 1) {
+                status = "Đã hết mã";
+            }
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            responses.add(CouponsResponse.builder()
+                    .id(item.getId())
+                    .code(item.getCode())
+                    .description(item.getDescription())
+                    .expiredDate(df.format(item.getExpiredDate()))
+                    .quantity(item.getQuantity())
+                    .discount(item.getDiscount())
+                    .status(status)
+                    .discountLimit(item.getDiscountLimit())
+                    .build());
         }
         return responses;
     }

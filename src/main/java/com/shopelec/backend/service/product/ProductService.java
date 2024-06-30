@@ -18,10 +18,13 @@ public interface ProductService {
     Page<ProductResponse> findProductByBrandId(Long brand_id, Pageable pageable, String user_id,String query);
     Page<ProductResponse> findProductByBrandIdAndCategoryId(Long category_id,Long brand_id, Pageable pageable, String user_id, String query);
     ProductResponse save(ProductRequest request, List<ProductSpecification> listData) throws IOException;
-    boolean existById(Long id);
-    List<ProductResponse> getAllProductAdmin();
+    Page<ProductResponse> getAllProductAdmin(Pageable pageable);
+    Page<ProductResponse> getAllProductByStatus(Pageable pageable, String status);
     List<FavoriteResponse> findAllFavoriteByUserId(String user_id);
     FavoriteResponse saveFavorite(FavoriteRequest request);
     void deleteFavorite(String user_id,Long product_id);
+    void deleteProduct(Long id);
+    ProductResponse findById(Long id);
+    ProductResponse update(ProductRequest request, List<ProductSpecification> listData) throws IOException;
 
 }

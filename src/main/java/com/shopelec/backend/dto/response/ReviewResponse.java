@@ -19,4 +19,5 @@ public class ReviewResponse {
     String date_created;
     String email;
     String name;
+    String imageUrl;
 }

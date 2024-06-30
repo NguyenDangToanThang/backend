@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -124,6 +126,18 @@ public class OrderServiceImpl implements OrderService{
     public List<Order> getAllOrder() {
         return orderRepository.findAll();
     }
+
+    @Override
+    public Page<Order> getAllOrdersPaginatedStatus(String status, Pageable pageable) {
+        return orderRepository.findByStatus(status, pageable);
+    }
+
+    @Override
+    public Page<Order> getAllOrdersPaginated(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+
+    }
+
 
     @Override
     public Order findById(Long id) {

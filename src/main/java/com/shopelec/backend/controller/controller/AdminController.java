@@ -1,10 +1,8 @@
 package com.shopelec.backend.controller.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.shopelec.backend.dto.request.ChangePasswordRequest;
 import com.shopelec.backend.dto.request.UpdateUserRequest;
 import com.shopelec.backend.dto.response.UserResponse;
-import com.shopelec.backend.service.firebase.FirebaseService;
 import com.shopelec.backend.service.user.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,29 +14,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/v1/admin")
+@RequestMapping(path = "/v1/admin")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j
 public class AdminController {
 
-    FirebaseService firebaseService;
     UserService userService;
 
-    @GetMapping("/user/delete/{email}")
-    public String deleteUser(@PathVariable String email, Model model) throws FirebaseAuthException {
-        firebaseService.deleteUserFirebase(email);
-        model.addAttribute("message", "successMsg");
-        return "redirect:/home";
+    @GetMapping("/user/{id}")
+    public String detailUser(@PathVariable String id, Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserResponse user = userService.findById(id);
+        model.addAttribute("user", user);
+        UserResponse admin = userService.findByEmail(name);
+        model.addAttribute("admin", admin);
+        return "user-details";
     }
 
+
     @PostMapping("/profile")
-    public String profileHandle(@RequestBody UpdateUserRequest request, Model model) {
+    public String profileHandle(UpdateUserRequest request, Model model) {
         UserResponse response = userService.update(request);
         if(response != null) {
-            model.addAttribute("message", "successMsg");
+            model.addAttribute("message", "Cập nhật tài khoản quản trị thành công");
         } else {
-            model.addAttribute("error", "errorMsg");
+            model.addAttribute("error", "Cập nhật tài khoản quản trị thất bại");
         }
         return "redirect:/home";
     }
@@ -47,7 +48,7 @@ public class AdminController {
     public String changePasswordHandle(@RequestBody ChangePasswordRequest request, Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         if(userService.changePasswordAdmin(name,request)){
-            model.addAttribute("message", "successMsg");
+            model.addAttribute("message", "Đổi mật khẩu thành công");
         }
         return "redirect:/home";
     }

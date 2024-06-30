@@ -13,4 +13,5 @@ public interface BrandService {
     boolean delete(Long id);
     boolean existByName(String name);
     List<BrandResponse> getAllBrand();
+    List<Brand> getAll();
 }

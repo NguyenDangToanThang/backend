@@ -5,14 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-    <title>Admin dashboard</title>
+    <title>Quản lý danh mục </title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/style_toast.css}">
     <link rel="stylesheet" th:href="@{/css/custom.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/37fd11320d.js" crossorigin="anonymous"></script>
 
@@ -65,12 +64,6 @@
                     <span>Quản lý mã giảm giá</span>
                 </a>
             </li>
-            <li>
-                <a th:href="@{/v1/admin/statistic}">
-                    <i class="material-icons">equalizer</i>
-                    <span>Thống kê</span>
-                </a>
-            </li>
 
         </ul>
     </nav>
@@ -80,10 +73,7 @@
             <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
             <div class="xp-breadcrumbbar text-center">
                 <h4 class="page-title">Quản lý danh mục</h4>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục</li>
-                </ol>
+
             </div>
         </div>
 
@@ -98,7 +88,7 @@
                                     <h2 class="ml-lg-2">Quản lý danh mục</h2>
                                 </div>
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
-                                    <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">Create</a>
+                                    <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">Thêm</a>
                                 </div>
                             </div>
                         </div>
@@ -118,19 +108,18 @@
                             <tr>
                                 <th>Mã</th>
                                 <th>Tên danh mục</th>
-                                <th>Hành động</th>
+                                <th>Số lượng sản phẩm</th>
+                                <th>Sửa</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="category: ${categories}">
                                 <td th:text="${category.id}"></td>
                                 <td th:text="${category.name}"></td>
+                                <td th:text="${category.products.size}"></td>
                                 <td>
-                                    <a href="#" class="edit" data-toggle="modal" th:attr="data-target='#editCategoryModal'+${category.id}">
-                                        <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-                                    </a>
-                                    <a href="#" class="delete" data-toggle="modal" th:attr="data-target='#deleteCategoryModal'+${category.id}" >
-                                        <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                    <a href="#" class="btn btn-outline-primary" data-toggle="modal" th:attr="data-target='#editCategoryModal'+${category.id}">
+                                        Sửa
                                     </a>
                                 </td>
                                 <div th:id="editCategoryModal + ${category.id}" class="modal fade">
@@ -215,6 +204,7 @@
                         </div>
                     </div>
                 </div>
+                <div th:insert="~{fragments/modal.html :: div}"></div>
             </div>
         </div>
         <footer class="footer">

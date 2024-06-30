@@ -33,7 +33,7 @@ public class CategoryController {
     public String toCategory(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
-        List<CategoryResponse> categories = categoryService.getAllCategory();
+        List<Category> categories = categoryService.getAll();
         model.addAttribute("admin", admin);
         model.addAttribute("categories", categories);
         return "category";
@@ -42,11 +42,11 @@ public class CategoryController {
     @PostMapping("/add")
     public String addCategory(CategoryRequest category, RedirectAttributes redirectAttrs) throws IOException {
         if(categoryService.existByName(category.getName())) {
-            redirectAttrs.addFlashAttribute("error", "Category already exists");
+            redirectAttrs.addFlashAttribute("error", "Danh mục đã tồn tại");
         } else {
             Category result = categoryService.save(category);
             log.info(category.getName());
-            redirectAttrs.addFlashAttribute("message","Create category successfully");
+            redirectAttrs.addFlashAttribute("message","Tạo danh mục thành công");
         }
         log.info(redirectAttrs.getFlashAttributes().toString());
         return "redirect:/v1/admin/category";
@@ -56,10 +56,10 @@ public class CategoryController {
     public String updateCategory(CategoryRequest category, RedirectAttributes redirectAttributes) throws IOException {
         log.info(category.getId().toString());
         if(categoryService.existByName(category.getName())) {
-            redirectAttributes.addFlashAttribute("error", "Category already exists");
+            redirectAttributes.addFlashAttribute("error", "Danh mục đã tồn tại");
         } else {
             categoryService.update(category);
-            redirectAttributes.addFlashAttribute("message", "Update category successfully");
+            redirectAttributes.addFlashAttribute("message", "Cập nhật danh mục thành công");
         }
         return "redirect:/v1/admin/category";
     }
@@ -68,11 +68,10 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
         boolean check = categoryService.delete(id);
         if(check) {
-            redirectAttrs.addFlashAttribute("message", "Delete category successfully");
+            redirectAttrs.addFlashAttribute("message", "Xóa danh mục thành công");
         } else {
-            redirectAttrs.addFlashAttribute("error", "Delete Failed");
+            redirectAttrs.addFlashAttribute("error", "Xóa không thành công");
         }
-        log.info(redirectAttrs.getFlashAttributes().toString());
         return "redirect:/v1/admin/category";
     }
 }

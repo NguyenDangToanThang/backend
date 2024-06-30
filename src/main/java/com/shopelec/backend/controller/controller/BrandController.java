@@ -4,7 +4,6 @@ import com.shopelec.backend.dto.request.BrandRequest;
 import com.shopelec.backend.dto.response.BrandResponse;
 import com.shopelec.backend.dto.response.UserResponse;
 import com.shopelec.backend.model.Brand;
-import com.shopelec.backend.model.Product;
 import com.shopelec.backend.service.brand.BrandService;
 import com.shopelec.backend.service.user.UserService;
 import lombok.AccessLevel;
@@ -37,7 +36,7 @@ public class BrandController {
     public String toBrand(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
-        List<BrandResponse> brands = brandService.getAllBrand();
+        List<Brand> brands = brandService.getAll();
         model.addAttribute("admin", admin);
         model.addAttribute("brands",brands);
         return "brand";
@@ -46,24 +45,22 @@ public class BrandController {
     @PostMapping("/add")
     public String addBrand(BrandRequest request, RedirectAttributes redirectAttributes) throws IOException {
         if(brandService.existByName(request.getName())) {
-            redirectAttributes.addFlashAttribute("error", "Brand already exists");
+            redirectAttributes.addFlashAttribute("error", "Thương hiệu đã tồn tại");
         } else {
             Brand result = brandService.save(request);
-            redirectAttributes.addFlashAttribute("message","Create brand successfully");
+            redirectAttributes.addFlashAttribute("message","Tạo thương hiệu thành công");
         }
-        log.info(redirectAttributes.getFlashAttributes().toString());
         return "redirect:/v1/admin/brand";
     }
 
     @PostMapping("/update")
     public String updateBrand(BrandRequest brand, RedirectAttributes redirectAttributes) throws IOException {
         if(brandService.existByName(brand.getName())) {
-            redirectAttributes.addFlashAttribute("error", "Brand already exists");
+            redirectAttributes.addFlashAttribute("error", "Thương hiệu đã tồn tại");
         } else {
             brandService.update(brand);
-            redirectAttributes.addFlashAttribute("message", "Update brand successfully");
+            redirectAttributes.addFlashAttribute("message", "Cập nhật thương hiệu thành công");
         }
-        log.info(redirectAttributes.getFlashAttributes().toString());
         return "redirect:/v1/admin/brand";
     }
 
@@ -71,11 +68,10 @@ public class BrandController {
     public String deleteBrand(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         boolean check = brandService.delete(id);
         if(check) {
-            redirectAttributes.addFlashAttribute("message", "Delete brand successfully");
+            redirectAttributes.addFlashAttribute("message", "Xóa thương hiệu thành công");
         } else {
-            redirectAttributes.addFlashAttribute("error", "Delete brand failed");
+            redirectAttributes.addFlashAttribute("error", "Xóa thương hiệu không thành công");
         }
-        log.info(redirectAttributes.getFlashAttributes().toString());
         return "redirect:/v1/admin/brand";
     }
 }

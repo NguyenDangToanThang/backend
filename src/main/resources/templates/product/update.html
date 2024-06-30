@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-    <title>Thêm mới sản phẩm</title>
+    <title>Cập nhật sản phẩm</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/custom.css}">
     <link rel="stylesheet" th:href="@{/css/style_toast.css}">
@@ -72,7 +72,7 @@
         <div class="top-navbar">
             <div th:insert="~{fragments/topbar.html :: div}" class="xp-topbar"></div>
             <div class="xp-breadcrumbbar text-center">
-                <h4 class="page-title">Thêm sản phẩm</h4>
+                <h4 class="page-title">Cập nhật sản phẩm</h4>
             </div>
         </div>
 
@@ -83,7 +83,7 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-start justify-content-center">
-                                    <h2 class="ml-lg-2">Thêm mới sản phẩm</h2>
+                                    <h2 class="ml-lg-2">Cập nhật sản phẩm</h2>
                                 </div>
                                 <div class="col-sm-6 p-0 d-flex justify-content-lg-end justify-content-center">
                                     <a th:href="@{/v1/admin/product}" class="btn btn-success">Quản lý sản phẩm</a>
@@ -97,76 +97,80 @@
                             <span th:text="${error}"></span>
                         </div>
                         <div class="container-fluid mt-3">
-                            <form th:action="@{/v1/admin/product/add}" method="post" enctype="multipart/form-data">
+                            <form th:action="@{/v1/admin/product/update}" method="post" enctype="multipart/form-data">
 
                                 <div class="form-row">
+                                    <input type="hidden" name="id" th:value="${product.id}" required readonly>
                                     <div class="form-group col-md-6">
                                         <label for="productName">Tên sản phẩm</label>
-                                        <input type="text" class="form-control" name="name" id="productName" required>
+                                        <input type="text" class="form-control" th:value="${product.name}" name="name" id="productName" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="quantity">Số lượng bán</label>
-                                        <input type="number" class="form-control" name="quantity" id="quantity" required>
+                                        <input type="number" class="form-control" th:value="${product.quantity}" name="quantity" id="quantity" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="originalPrice">Giá gốc</label>
-                                        <input type="number" class="form-control" name="price" id="originalPrice" required>
+                                        <input type="number" class="form-control" th:value="${price}" name="price" id="originalPrice" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="discount">Giảm giá (%)</label>
-                                        <input type="number" class="form-control" name="discount" id="discount" required>
+                                        <input type="number" class="form-control" th:value="${product.discount}" name="discount" id="discount" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="discountedPrice">Giá bán</label>
-                                    <input type="text" class="form-control" id="discountedPrice" readonly>
+                                    <input type="text" class="form-control" th:value="${product.price - product.price * product.discount / 100}" id="discountedPrice" readonly>
                                 </div>
                                 <div class="form-group product-image">
                                     <label>Hình ảnh sản phẩm</label>
                                     <a id="choseFile" class="btn btn-outline-primary ml-3">Chọn ảnh</a>
-                                        <input type="file" id="imageInput" name="image_url" accept="image/*" required hidden="hidden">
-                                        <img id="previewImage" src="/img/no-image-news.png" alt="Preview" style="max-width: 300px; display: block;">
-
-                                        <script>
-                                            document.getElementById('imageInput').addEventListener('change', function(event) {
-                                                const file = event.target.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = function(e) {
-                                                        const img = document.getElementById('previewImage');
-                                                        img.src = e.target.result;
-                                                        img.style.display = 'block';
-                                                    }
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            });
-                                            document.querySelector('#choseFile').addEventListener('click', function() {
-                                                document.getElementById('imageInput').click();
-                                            });
-                                        </script>
+                                    <input type="file" id="imageInput" name="image_url" accept="image/*" hidden="hidden">
+                                    <img id="previewImage" th:src="${product.image_url}" alt="Preview" style="max-width: 300px; display: block;">
+                                    <script>
+                                      document.getElementById('imageInput').addEventListener('change', function(event) {
+                                          const file = event.target.files[0];
+                                          if (file) {
+                                              const reader = new FileReader();
+                                              reader.onload = function(e) {
+                                                  const img = document.getElementById('previewImage');
+                                                  img.src = e.target.result;
+                                                  img.style.display = 'block';
+                                              }
+                                              reader.readAsDataURL(file);
+                                          }
+                                      });
+                                      document.querySelector('#choseFile').addEventListener('click', function() {
+                                          document.getElementById('imageInput').click();
+                                      });
+                                    </script>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Mô tả</label>
-                                    <textarea class="form-control" name="description" id="description" rows="5" required></textarea>
+                                    <textarea class="form-control" th:text="${product.description}" name="description" id="description" rows="5" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="brand_id">Chọn thương hiệu</label>
-                                    <input id="brand_id" name="brand_id" hidden="hidden" required>
+                                    <input id="brand_id" name="brand_id" th:value="${product.brand.id}" hidden="hidden" required>
                                     <div class="brand-buttons">
-                                        <button th:each="brand : ${brands}" type="button"
+                                        <button th:each="item : ${brands}" type="button"
                                                 class="btn btn-secondary btn-sm"
-                                                th:text="${brand.name}" th:value="${brand.id}"></button>
+                                                th:text="${item.name}"
+                                                th:classappend="${item.id == product.brand.id} ? ' active' : ''"
+                                                th:value="${item.id}"></button>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="category_id">Chọn danh mục</label>
-                                    <input id="category_id" name="category_id" hidden="hidden" required>
+                                    <input id="category_id" name="category_id" th:value="${product.category.id}" hidden="hidden" required>
                                     <div class="category-buttons">
-                                        <button th:each="category : ${categories}" type="button"
+                                        <button th:each="item : ${categories}" type="button"
                                                 class="btn btn-secondary btn-sm"
-                                                th:text="${category.name}" th:value="${category.id}"></button>
+                                                th:text="${item.name}"
+                                                th:classappend="${item.id == product.category.id} ? ' active' : ''"
+                                                th:value="${item.id}"></button>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -177,8 +181,9 @@
                                             <i class="fa-solid fa-plus"></i></button>
                                     </div>
                                 </div>
+
                                 <div class="form-group d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary text-right" id="add-btn">Thêm sản phẩm</button>
+                                    <button type="submit" class="btn btn-primary text-right" id="add-btn">Lưu sản phẩm</button>
                                 </div>
                             </form>
                         </div>
@@ -199,6 +204,12 @@
 
 
 <div id="toastBox"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const existingFeatures = /*[[${specifications}]]*/ [];
+    /*]]>*/
+</script>
 
 <script src="/js/script_toast.js"></script>
 <script src="/js/script_product.js"></script>

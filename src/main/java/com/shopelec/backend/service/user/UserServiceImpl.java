@@ -1,10 +1,13 @@
 package com.shopelec.backend.service.user;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import com.shopelec.backend.dto.request.ChangePasswordRequest;
-import com.shopelec.backend.dto.response.ProductResponse;
+import com.shopelec.backend.service.firebase.FirebaseStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +23,7 @@ import com.shopelec.backend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    FirebaseStorageService firebaseStorageService;
 
     @Override
     public User save(SignupRequest request) {
@@ -74,10 +79,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse findById(String id) {
-//        log.info("ID: {}", id);
-        Optional<User> user = userRepository.findById(id);
-//        log.info("User: {}", user);
-        return userMapper.toUserResponse(user.get());
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+        if(user.getImageUrl() != null) {
+            user.setImageUrl(convertImageUrl(user.getImageUrl()));
+        }
+        return userMapper.toUserResponse(user);
+    }
+
+    private String convertImageUrl(String image_url) {
+        return String.format("https://storage.googleapis.com/%s/%s", "shopelec-d93e6.appspot.com", image_url);
     }
 
     @Override
@@ -87,7 +99,6 @@ public class UserServiceImpl implements UserService{
                     () -> new NullPointerException("User not found")
             );
             userRepository.delete(user);
-//            firebaseService.deleteUserFirebase(email);
         } else {
             throw new NullPointerException("User not found");
         }
@@ -107,6 +118,20 @@ public class UserServiceImpl implements UserService{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void uploadAvatar(MultipartFile avatar, String id) throws IOException, FirebaseAuthException {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+        String image = firebaseStorageService.uploadFile(avatar);
+        user.setImageUrl(image);
+        userRepository.save(user);
+        String imageUrl = firebaseStorageService.getFileUrl(image);
+        UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(id)
+                .setPhotoUrl(imageUrl);
+        FirebaseAuth.getInstance().updateUser(request).getUid();
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -32,13 +33,17 @@ public class AuthController {
     }
 
     @GetMapping("/home")
-    public String home(Model model) throws FirebaseAuthException {
+    public String home(Model model, @RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "5") int pageSize) throws FirebaseAuthException {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
-        List<UserResponseFirebase> response = firebaseService.listAllUsers();
+        List<UserResponseFirebase> response = firebaseService.listAllUsers(page,pageSize);
+        int totalUsersCount = firebaseService.getTotalUsersCount();
+        int totalPages = totalUsersCount / pageSize + (totalUsersCount % pageSize == 0 ? 0 : 1);
         model.addAttribute("users", response);
         model.addAttribute("admin", admin);
-        log.info("ADMIN: {}" , admin);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         return "admin";
     }
 }
