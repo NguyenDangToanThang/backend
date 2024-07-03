@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -119,7 +120,7 @@ public class ApplicationInitConfig {
 //                .build()
 //                .getService();
 //    }
-
+//
     @Bean
     public Storage storage() throws IOException {
 
