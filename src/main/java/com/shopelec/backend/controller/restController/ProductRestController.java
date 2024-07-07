@@ -40,7 +40,7 @@ public class ProductRestController {
         try {
             String sortField = sort[0];
             Sort.Direction sortDirection = Sort.Direction.fromString(sort[1]);
-            Sort sorting = Sort.by(sortDirection, sortField);
+            Sort sorting = Sort.by(sortDirection,sortField);
             Pageable paging = PageRequest.of(page,size,sorting);
             Page<ProductResponse> pageProducts;
             if(category_id == 0 && brand_id == 0) {

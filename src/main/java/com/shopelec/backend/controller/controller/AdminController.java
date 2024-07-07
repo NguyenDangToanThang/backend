@@ -45,7 +45,7 @@ public class AdminController {
     }
 
     @PostMapping("/change_password")
-    public String changePasswordHandle(@RequestBody ChangePasswordRequest request, Model model) {
+    public String changePasswordHandle( ChangePasswordRequest request, Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         if(userService.changePasswordAdmin(name,request)){
             model.addAttribute("message", "Đổi mật khẩu thành công");

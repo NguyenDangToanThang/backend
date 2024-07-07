@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +48,17 @@ public class ProductController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse admin = userService.findByEmail(name);
         model.addAttribute("admin", admin);
-        Pageable pageable = PageRequest.of(page, size);
+
         Page<ProductResponse> productPage;
 
         if (!status.isEmpty()) {
+            Pageable pageable = PageRequest.of(page, size);
             productPage = productService.getAllProductByStatus(pageable, status);
         } else {
+            String sortField = "id";
+            Sort.Direction sortDirection = Sort.Direction.fromString("desc");
+            Sort sorting = Sort.by(sortDirection,sortField);
+            Pageable pageable = PageRequest.of(page, size,sorting);
             productPage = productService.getAllProductAdmin(pageable);
         }
 

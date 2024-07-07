@@ -22,4 +22,5 @@ public class Specification {
     public static org.springframework.data.jpa.domain.Specification<Product> hasBrandId(Long brandId) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("brand").get("id"), brandId);
     }
+
 }

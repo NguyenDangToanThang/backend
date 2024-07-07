@@ -98,7 +98,7 @@
                                     <div class="p-3 m-3"  id="statusFilter">
                                         <label for="statusFilter">Chọn trạng thái:</label>
                                         <select class="form-control" onchange="applyFilter(this.value)">
-                                            <option th:selected="${status == null}" value="">Tất cả</option>
+                                            <option th:selected="${status == ''}" value="">Tất cả</option>
                                             <option th:selected="${status == 'Có sẵn'}" value="Có sẵn">Có sẵn</option>
                                             <option th:selected="${status == 'Hết hàng'}" value="Hết hàng">Hết hàng</option>
                                         </select>
@@ -194,21 +194,21 @@
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
                                 <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                                    <a class="page-link" th:href="@{/v1/admin/product(page=0, size=${pageSize})}">Đầu</a>
+                                    <a class="page-link" th:href="@{/v1/admin/product(page=0, size=${pageSize}, status=${status})}">Đầu</a>
                                 </li>
                                 <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                                    <a class="page-link" th:href="@{/v1/admin/product(page=${currentPage - 1},size=${size})}">Trước</a>
+                                    <a class="page-link" th:href="@{/v1/admin/product(page=${currentPage - 1},size=${size}, status=${status})}">Trước</a>
                                 </li>
                                 <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                                     th:class="${pageNumber == currentPage} ? 'page-item active' : 'page-item'">
-                                    <a class="page-link" th:href="@{/v1/admin/product(page=${pageNumber},size=${size})}"
+                                    <a class="page-link" th:href="@{/v1/admin/product(page=${pageNumber},size=${size}, status=${status})}"
                                        th:text="${pageNumber + 1}"></a>
                                 </li>
                                 <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                                    <a class="page-link" th:href="@{/v1/admin/product(page=${currentPage + 1},size=${size})}">Tiếp</a>
+                                    <a class="page-link" th:href="@{/v1/admin/product(page=${currentPage + 1},size=${size}, status=${status})}">Tiếp</a>
                                 </li>
                                 <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                                    <a class="page-link" th:href="@{/v1/admin/product(page=${totalPages - 1},size=${size})}">Cuối</a>
+                                    <a class="page-link" th:href="@{/v1/admin/product(page=${totalPages - 1},size=${size}, status=${status})}">Cuối</a>
                                 </li>
                             </ul>
                         </nav>

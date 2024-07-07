@@ -70,9 +70,15 @@ public class OrderController {
 
     @GetMapping("/approveOrder/{orderId}")
     public String approve(@RequestParam String userId, @PathVariable Long orderId, RedirectAttributes redirectAttributes) throws ExecutionException, FirebaseMessagingException, InterruptedException {
+
         String token = deviceTokenService.getTokenByUserId(userId).getToken();
         orderService.update(orderId, "Chờ giao hàng");
-        fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng đã được duyệt và đang giao đến bạn.");
+        try {
+            fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng đã được duyệt và đang giao đến bạn.");
+        } catch (Exception ignored) {
+
+        }
+
         redirectAttributes.addFlashAttribute("message", "Duyệt đơn hàng thành công");
         return "redirect:/v1/admin/order/" + orderId;
     }

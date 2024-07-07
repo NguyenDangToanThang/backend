@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.Objects;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class OrderServiceImpl implements OrderService{
 
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
     OrderRepository orderRepository;
     OrderDetailRepository detailRepository;
     AddressRepository addressRepository;
@@ -78,7 +81,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<OrderResponse> getAllOrderByUserId(String user_id,String status) {
         List<OrderResponse> responses = new ArrayList<>();
-        List<Order> orders = orderRepository.findAllOrderByUserId(user_id);
+        List<Order> orders = orderRepository.findAllOrderByUserIdOrderByOrderDateDesc(user_id);
         for(Order order : orders) {
            if(order.getStatus().trim().equals(status.trim())) {
                Coupons coupons = Coupons.builder()
@@ -152,12 +155,11 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus(status);
         if(!Objects.equals(status, "Đã hủy") && !Objects.equals(status, "Chờ duyệt")) {
             orderRepository.save(order);
+            return;
         }
         if(Objects.equals(status, "Đã hủy")) {
-            Coupons coupons = couponsRepository.findById(order.getCoupon_id()).orElseThrow(
-                    () -> new RuntimeException("Coupons not found")
-            );
-            if(coupons.getQuantity() - 1 > 0 || coupons.getId() != -1) {
+            Coupons coupons = couponsRepository.findById(order.getCoupon_id()).orElse(null);
+            if(coupons != null && coupons.getId() != -1) {
                 coupons.setQuantity(coupons.getQuantity() - 1);
             }
             List<OrderDetail> orderDetails = detailRepository.findAllByOrderId(order.getId());
@@ -180,8 +182,6 @@ public class OrderServiceImpl implements OrderService{
                 product.setQuantity(product.getQuantity() - orderDetail.getQuantity());
                 productRepository.save(product);
             }
-
-            order.setOrderDate(LocalDateTime.now());
             Order order1 = Order.builder()
                     .address(order.getAddress())
                     .user(order.getUser())
