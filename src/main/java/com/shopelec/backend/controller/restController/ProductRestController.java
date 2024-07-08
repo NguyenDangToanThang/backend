@@ -26,8 +26,22 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductRestController {
 
-    private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
     ProductService productService;
+
+    @GetMapping("/top")
+    public ResponseEntity<?> getTopProduct(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "4") int size,
+                                           @RequestParam(required = false) String user_id) {
+        Pageable paging = PageRequest.of(page,size);
+        Page<ProductResponse> pageProducts = productService.getTopProduct(paging,user_id);
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", pageProducts.getContent());
+        response.put("currentPage", pageProducts.getNumber());
+        response.put("totalItems", pageProducts.getTotalElements());
+        response.put("totalPages", pageProducts.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllProduct(@RequestParam(defaultValue = "0") Long category_id,
@@ -60,8 +74,8 @@ public class ProductRestController {
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Error retrieving products ", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -4,7 +4,6 @@ import com.shopelec.backend.dto.request.FavoriteRequest;
 import com.shopelec.backend.dto.request.ProductRequest;
 import com.shopelec.backend.dto.response.FavoriteResponse;
 import com.shopelec.backend.dto.response.ProductResponse;
-import com.shopelec.backend.model.Product;
 import com.shopelec.backend.model.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,5 +25,6 @@ public interface ProductService {
     void deleteProduct(Long id);
     ProductResponse findById(Long id);
     ProductResponse update(ProductRequest request, List<ProductSpecification> listData) throws IOException;
+    Page<ProductResponse> getTopProduct(Pageable pageable, String user_id);
 
 }

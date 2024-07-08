@@ -188,6 +188,14 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public Page<ProductResponse> getTopProduct(Pageable pageable, String user_id) {
+        org.springframework.data.jpa.domain.Specification<Product> spec = org.springframework.data.jpa.domain.Specification.where(
+                Specification.isNotDeleted().and(Specification.sortByReviewCountAndRating()));
+        Page<Product> productsPage = productRepository.findAll(spec, pageable);
+        return productsPage.map(product -> convertToProductResponseUser(product, user_id));
+    }
+
+    @Override
     public Page<ProductResponse> getAllProductAdmin(Pageable pageable) {
         org.springframework.data.jpa.domain.Specification<Product> spec =
                 org.springframework.data.jpa.domain.Specification.where(
