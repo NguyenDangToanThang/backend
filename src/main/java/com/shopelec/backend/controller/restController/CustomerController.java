@@ -28,9 +28,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
-    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
     UserService userService;
-    AddressService addressService;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody SignupRequest request) {
@@ -39,7 +37,6 @@ public class CustomerController {
 
     @GetMapping("/getInfo")
     public ResponseEntity<UserResponse> getInfoByEmail(@RequestParam String id) {
-//        log.info("ID getInfo: {}", id);
         UserResponse userResponse = userService.findById(id);
         return ResponseEntity.ok(userResponse);
     }
@@ -54,6 +51,4 @@ public class CustomerController {
         userService.uploadAvatar(avatar,id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

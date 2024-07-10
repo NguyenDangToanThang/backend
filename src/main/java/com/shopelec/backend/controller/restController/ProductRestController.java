@@ -26,6 +26,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductRestController {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
     ProductService productService;
 
     @GetMapping("/top")

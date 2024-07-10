@@ -15,6 +15,7 @@ import java.util.Date;
 public class OrderResponse {
     Long id;
     LocalDateTime orderDate;
+    LocalDateTime modifiedDate;
     double totalPrice;
     String status;
     AddressResponse addressResponse;

@@ -60,7 +60,6 @@ public class OrderController {
         } else {
             ordersPage = orderService.getAllOrdersPaginated(pageable);
         }
-
         model.addAttribute("orders", ordersPage.getContent());
         model.addAttribute("currentPage", ordersPage.getNumber());
         model.addAttribute("totalPages", ordersPage.getTotalPages());
@@ -74,7 +73,7 @@ public class OrderController {
         String token = deviceTokenService.getTokenByUserId(userId).getToken();
         orderService.update(orderId, "Chờ giao hàng");
         try {
-            fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng đã được duyệt và đang giao đến bạn.");
+            fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng #"+orderId+" đã được duyệt và đang giao đến bạn.");
         } catch (Exception ignored) {
 
         }
@@ -89,7 +88,7 @@ public class OrderController {
         String userId = order.getUser().getId();
         String token = deviceTokenService.getTokenByUserId(userId).getToken();
         orderService.updateStatus(orderId,"Đã hủy");
-        fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng đã bị hủy bởi quản trị viên.");
+        fcmService.sendNotification(token, "Trạng thái đơn hàng", "Đơn hàng #"+orderId+" đã bị hủy bởi quản trị viên.");
         redirectAttributes.addFlashAttribute("message", "Hủy đơn hàng thành công");
         return "redirect:/v1/admin/order";
     }

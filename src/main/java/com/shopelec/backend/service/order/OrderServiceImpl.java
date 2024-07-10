@@ -59,6 +59,7 @@ public class OrderServiceImpl implements OrderService{
                 .orderDate(request.getOrderDate())
                 .status(request.getStatus())
                 .totalPrice(request.getTotalPrice())
+                .modifiedDate(LocalDateTime.now())
                 .build());
 
         List<OrderDetailRequest> orderDetails = request.getOrderDetailRequests();
@@ -103,6 +104,7 @@ public class OrderServiceImpl implements OrderService{
                        .orderDate(order.getOrderDate())
                        .totalPrice(order.getTotalPrice())
                        .status(order.getStatus())
+                       .modifiedDate(order.getModifiedDate())
                        .addressResponse(
                                AddressResponse.builder()
                                        .id(order.getAddress().getId())
@@ -122,6 +124,7 @@ public class OrderServiceImpl implements OrderService{
     public void update(Long id, String status) {
         Order order = findById(id);
         order.setStatus(status);
+        order.setModifiedDate(LocalDateTime.now());
         orderRepository.save(order);
     }
 
@@ -154,6 +157,7 @@ public class OrderServiceImpl implements OrderService{
         Order order = findById(id);
         order.setStatus(status);
         if(!Objects.equals(status, "Đã hủy") && !Objects.equals(status, "Chờ duyệt")) {
+            order.setModifiedDate(LocalDateTime.now());
             orderRepository.save(order);
             return;
         }
@@ -170,6 +174,7 @@ public class OrderServiceImpl implements OrderService{
                 product.setQuantity(product.getQuantity() + orderDetails.get(i).getQuantity());
                 productRepository.save(product);
             }
+            order.setModifiedDate(LocalDateTime.now());
             orderRepository.save(order);
         }
         else if (Objects.equals(status, "Chờ duyệt")) {

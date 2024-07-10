@@ -72,7 +72,7 @@
                 </a>
             </li>
 
-            <li >
+            <li class="active">
                 <a th:href="@{/v1/admin/order}">
                     <i class="material-icons">library_books</i>
                     <span>Quản lý đơn hàng</span></a>
@@ -92,7 +92,7 @@
                     <span>Quản lý thương hiệu</span>
                 </a>
             </li>
-            <li class="active">
+            <li>
                 <a th:href="@{/v1/admin/coupons}">
                     <i class="material-icons">discount</i>
                     <span>Quản lý mã giảm giá</span>
@@ -112,10 +112,15 @@
 
         <div class="main-content">
             <div class="row mb-3">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <span th:if="${order.status == 'Chờ duyệt'}">Trạng thái đơn hàng: <strong th:text="${order.status}" style="color: red"></strong></span>
                     <span th:if="${order.status != 'Chờ duyệt'}">Trạng thái đơn hàng: <strong th:text="${order.status}" style="color: green"></strong></span>
-
+                </div>
+                <div th:if="${order.status == 'Đã giao'}" class="col-md-6 text-right">
+                    <span>Đã giao ngày: <strong th:text="${order.getModifiedDateFormat}"></strong></span>
+                </div>
+                <div th:if="${order.status == 'Đã hủy'}" class="col-md-6 text-right">
+                    <span>Đã hủy ngày: <strong th:text="${order.getModifiedDateFormat}"></strong></span>
                 </div>
             </div>
             <div class="row">
@@ -216,7 +221,7 @@
         <footer class="footer">
             <div class="container-fluid">
                 <div class="footer-in">
-                    <p>&copy 2024 Shop electronics - All Rights Reserved.</p>
+                    <p>&copy 2024 Shop electronics - Mọi quyền được bảo lưu.</p>
                 </div>
             </div>
         </footer>

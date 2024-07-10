@@ -10,7 +10,7 @@ document.getElementById('add-feature').addEventListener('click', function () {
     nameInput.type = 'text';
     nameInput.name = 'productFeatureName';
     nameInput.classList.add("form-control");
-    nameInput.placeholder = "Enter name";
+    nameInput.placeholder = "Nhập tên";
 
     featureContainer.appendChild(nameInput);
 
@@ -18,7 +18,7 @@ document.getElementById('add-feature').addEventListener('click', function () {
     descInput.type = 'text';
     descInput.name = 'productFeatureDesc';
     descInput.classList.add('form-control')
-    descInput.placeholder = 'Enter value';
+    descInput.placeholder = 'Nhập giá trị';
     featureContainer.appendChild(descInput);
 
 

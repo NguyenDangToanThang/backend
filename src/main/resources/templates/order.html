@@ -136,8 +136,7 @@
                                 <th>Tài khoản</th>
                                 <th>Trạng thái</th>
                                 <th>Tổng tiền</th>
-                                <th>Xem chi tiết</th>
-                                <th>Hủy đơn</th>
+                                <th>Chi tiết</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -152,12 +151,6 @@
                                         Xem
                                     </a>
                                 </td>
-                                <td>
-                                    <a th:href="@{'/v1/admin/order/cancel/' + ${order.id}}" class="btn btn-outline-danger" >
-                                        Hủy
-                                    </a>
-                                </td>
-
                             </tr>
                             </tbody>
                         </table>

@@ -57,7 +57,7 @@ public class CouponsController {
             return "redirect:/v1/admin/coupons";
         }
         couponsService.createCoupons(response);
-        fcmService.sendNotificationAllUser("Thông báo","Mã giảm giá mới vừa được tung ra săn hàng ngay thôi");
+        fcmService.sendNotificationAllUser("Thông báo","Mã giảm giá " + response.getCode() + " vừa được tung ra với ưu đãi " + response.getDescription());
         redirectAttributes.addFlashAttribute("message", "Tạo mới mã giảm giá thành công , thông báo đã được gửi cho tất cả người dùng");
         return "redirect:/v1/admin/coupons";
     }

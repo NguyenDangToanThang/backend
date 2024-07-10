@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Entity
 @Data
@@ -20,6 +19,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     LocalDateTime orderDate;
+    LocalDateTime modifiedDate;
     double totalPrice;
     String status;
 
@@ -27,6 +27,11 @@ public class Order {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return this.orderDate.format(formatter);
     }
+    public String getModifiedDateFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return this.modifiedDate.format(formatter);
+    }
+
     Long coupon_id;
     @ManyToOne
     @JoinColumn(name = "user_id")

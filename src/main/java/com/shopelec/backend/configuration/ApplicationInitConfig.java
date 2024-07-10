@@ -58,35 +58,35 @@ public class ApplicationInitConfig {
         };
     }
 // for deploy
-   @Bean
-   public FirebaseApp initFirebase() throws IOException {
-       String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
-       if (credentialsPath == null) {
-           throw new FileNotFoundException("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set");
-       }
-       FileInputStream serviceAccount =
-               new FileInputStream(credentialsPath);
+//   @Bean
+//   public FirebaseApp initFirebase() throws IOException {
+//       String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+//       if (credentialsPath == null) {
+//           throw new FileNotFoundException("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set");
+//       }
+//       FileInputStream serviceAccount =
+//               new FileInputStream(credentialsPath);
+//
+//       FirebaseOptions options = new FirebaseOptions.Builder()
+//               .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//               .setStorageBucket("shopelec-d93e6.appspot.com")
+//               .build();
+//
+//       return FirebaseApp.initializeApp(options);
+//   }
 
-       FirebaseOptions options = new FirebaseOptions.Builder()
-               .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-               .setStorageBucket("shopelec-d93e6.appspot.com")
-               .build();
+     @Bean
+     public FirebaseApp initFirebase() throws IOException {
+         FileInputStream serviceAccount =
+                 new FileInputStream("./serviceAccountKey.json");
 
-       return FirebaseApp.initializeApp(options);
-   }
+         FirebaseOptions options = new FirebaseOptions.Builder()
+                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                 .setStorageBucket("shopelec-d93e6.appspot.com")
+                 .build();
 
-    // @Bean
-    // public FirebaseApp initFirebase() throws IOException {
-    //     FileInputStream serviceAccount =
-    //             new FileInputStream("./serviceAccountKey.json");
-
-    //     FirebaseOptions options = new FirebaseOptions.Builder()
-    //             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-    //             .setStorageBucket("shopelec-d93e6.appspot.com")
-    //             .build();
-
-    //     return FirebaseApp.initializeApp(options);
-    // }
+         return FirebaseApp.initializeApp(options);
+     }
 
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
@@ -104,35 +104,35 @@ public class ApplicationInitConfig {
     }
 
     //for deploy
-   @Bean
-   public Storage storage() throws IOException {
-       String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
-       if (credentialsPath == null) {
-           throw new FileNotFoundException("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set");
-       }
-       FileInputStream serviceAccount =
-               new FileInputStream(credentialsPath);
+//   @Bean
+//   public Storage storage() throws IOException {
+//       String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+//       if (credentialsPath == null) {
+//           throw new FileNotFoundException("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set");
+//       }
+//       FileInputStream serviceAccount =
+//               new FileInputStream(credentialsPath);
+//
+//       GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+//
+//       return StorageOptions.newBuilder()
+//               .setCredentials(credentials)
+//               .build()
+//               .getService();
+//   }
 
-       GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+     @Bean
+     public Storage storage() throws IOException {
 
-       return StorageOptions.newBuilder()
-               .setCredentials(credentials)
-               .build()
-               .getService();
-   }
+         FileInputStream serviceAccount =
+                 new FileInputStream("./serviceAccountKey.json");
 
-    // @Bean
-    // public Storage storage() throws IOException {
+         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
 
-    //     FileInputStream serviceAccount =
-    //             new FileInputStream("./serviceAccountKey.json");
-
-    //     GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-
-    //     return StorageOptions.newBuilder()
-    //             .setCredentials(credentials)
-    //             .build()
-    //             .getService();
-    // }
+         return StorageOptions.newBuilder()
+                 .setCredentials(credentials)
+                 .build()
+                 .getService();
+     }
 
 }

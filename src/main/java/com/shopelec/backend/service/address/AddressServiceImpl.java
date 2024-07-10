@@ -2,7 +2,6 @@ package com.shopelec.backend.service.address;
 
 import com.shopelec.backend.dto.request.AddressRequest;
 import com.shopelec.backend.dto.response.AddressResponse;
-import com.shopelec.backend.mapper.UserMapper;
 import com.shopelec.backend.model.Address;
 import com.shopelec.backend.repository.AddressRepository;
 import com.shopelec.backend.repository.UserRepository;
@@ -145,6 +144,5 @@ public class AddressServiceImpl implements AddressService{
                 () -> new RuntimeException("Address not found")
         );
         addressRepository.delete(address);
-        log.info("Delete address id {} successful",id);
     }
 }
