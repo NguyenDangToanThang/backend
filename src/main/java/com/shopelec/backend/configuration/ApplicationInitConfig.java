@@ -75,6 +75,7 @@ public class ApplicationInitConfig {
 //       return FirebaseApp.initializeApp(options);
 //   }
 
+//   for localhost
      @Bean
      public FirebaseApp initFirebase() throws IOException {
          FileInputStream serviceAccount =
@@ -121,6 +122,7 @@ public class ApplicationInitConfig {
 //               .getService();
 //   }
 
+//   for localhost
      @Bean
      public Storage storage() throws IOException {
 

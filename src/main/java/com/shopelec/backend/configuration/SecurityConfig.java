@@ -24,7 +24,8 @@ public class SecurityConfig {
             "/img/**",
             "/js/**",
             "/css/**",
-            "/font/**"
+            "/font/**",
+            "/ws/**"
     };
 
     @Autowired
